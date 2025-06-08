@@ -7,6 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         body { 
             font-family: 'Inter', sans-serif; 
@@ -63,6 +64,7 @@
             border-radius: 0.5rem; 
             box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06); 
             transition: all 0.2s ease-in-out;
+            cursor: pointer;
         }
         .styled-button:hover:not(:disabled) {
             background-color: #1d4ed8; 
@@ -77,6 +79,14 @@
 </head>
 <body class="p-4 md:p-8">
     <div class="container mx-auto max-w-7xl main-container p-6 md:p-10">
+        <!-- BOTONES DE NAVEGACIÓN -->
+        <div class="flex justify-end mb-6">
+            <div class="space-x-4">
+                <a id="goToCuencasBtn" href="cuencas.html" class="styled-button bg-green-600 hover:bg-green-700">Análisis de Cuencas</a>
+                <a href="../index.html" class="styled-button bg-slate-500 hover:bg-slate-600">Volver al Inicio</a>
+            </div>
+        </div>
+
         <header class="mb-10 pb-6 border-b border-slate-200">
             <h1 class="text-4xl md:text-5xl font-bold text-center text-blue-700">Visualizador Comparativo de Escenarios OWF</h1>
             <p class="text-center text-slate-600 mt-3 text-lg">Herramienta online para explorar y comparar dos escenarios de recursos hídricos.</p>
@@ -89,86 +99,24 @@
                 <div class="p-6 scenario-block">
                     <h4 class="text-lg font-semibold text-blue-600 mb-3 border-b pb-2">Escenario 1</h4>
                     <div class="space-y-4">
-                        <div>
-                            <label for="policy_s1" class="block text-sm font-medium text-slate-700 mb-1">Política de Asignación:</label>
-                            <select id="policy_s1" class="w-full focus:ring-blue-500 focus:border-blue-500">
-                                <option value="FCFS">First Come First Served (FCFS)</option>
-                                <option value="PE">Policy Enforced (PE)</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label for="tempChange_s1" class="block text-sm font-medium text-slate-700 mb-1">Cambio de Temperatura:</label>
-                            <select id="tempChange_s1" class="w-full focus:ring-blue-500 focus:border-blue-500">
-                                <option value="0">0°C</option><option value="1">+1°C</option><option value="2">+2°C</option><option value="3">+3°C</option><option value="4">+4°C</option><option value="5">+5°C</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label for="precipChange_s1" class="block text-sm font-medium text-slate-700 mb-1">Cambio de Precipitación:</label>
-                            <select id="precipChange_s1" class="w-full focus:ring-blue-500 focus:border-blue-500">
-                                <option value="70">-30%</option><option value="80">-20%</option><option value="90">-10%</option><option value="100">0%</option><option value="110">+10%</option><option value="120">+20%</option><option value="130">+30%</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label for="popYear_s1" class="block text-sm font-medium text-slate-700 mb-1">Año Proy. Población (FW):</label>
-                            <select id="popYear_s1" class="w-full focus:ring-blue-500 focus:border-blue-500">
-                                <option value="2022">2022</option><option value="2030">2030</option><option value="2040">2040</option><option value="2050">2050</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label for="cropYear_s1" class="block text-sm font-medium text-slate-700 mb-1">Año Proy. Cultivos (Irr):</label>
-                            <select id="cropYear_s1" class="w-full focus:ring-blue-500 focus:border-blue-500">
-                                <option value="2022">2022</option><option value="2030">2030</option><option value="2040">2040</option><option value="2050">2050</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label for="livestockYear_s1" class="block text-sm font-medium text-slate-700 mb-1">Año Proy. Pecuario (Liv):</label>
-                            <select id="livestockYear_s1" class="w-full focus:ring-blue-500 focus:border-blue-500">
-                                <option value="2022">2022</option><option value="2030">2030</option><option value="2040">2040</option><option value="2050">2050</option>
-                            </select>
-                        </div>
+                        <div><label for="policy_s1" class="block text-sm font-medium text-slate-700 mb-1">Política de Asignación:</label><select id="policy_s1" class="w-full focus:ring-blue-500 focus:border-blue-500"><option value="FCFS">First Come First Served (FCFS)</option><option value="PE">Policy Enforced (PE)</option></select></div>
+                        <div><label for="tempChange_s1" class="block text-sm font-medium text-slate-700 mb-1">Cambio de Temperatura:</label><select id="tempChange_s1" class="w-full focus:ring-blue-500 focus:border-blue-500"><option value="0">0°C</option><option value="1">+1°C</option><option value="2">+2°C</option><option value="3">+3°C</option><option value="4">+4°C</option><option value="5">+5°C</option></select></div>
+                        <div><label for="precipChange_s1" class="block text-sm font-medium text-slate-700 mb-1">Cambio de Precipitación:</label><select id="precipChange_s1" class="w-full focus:ring-blue-500 focus:border-blue-500"><option value="70">-30%</option><option value="80">-20%</option><option value="90">-10%</option><option value="100">0%</option><option value="110">+10%</option><option value="120">+20%</option><option value="130">+30%</option></select></div>
+                        <div><label for="popYear_s1" class="block text-sm font-medium text-slate-700 mb-1">Año Proy. Población (FW):</label><select id="popYear_s1" class="w-full focus:ring-blue-500 focus:border-blue-500"><option value="2022">2022</option><option value="2030">2030</option><option value="2040">2040</option><option value="2050">2050</option></select></div>
+                        <div><label for="cropYear_s1" class="block text-sm font-medium text-slate-700 mb-1">Año Proy. Cultivos (Irr):</label><select id="cropYear_s1" class="w-full focus:ring-blue-500 focus:border-blue-500"><option value="2022">2022</option><option value="2030">2030</option><option value="2040">2040</option><option value="2050">2050</option></select></div>
+                        <div><label for="livestockYear_s1" class="block text-sm font-medium text-slate-700 mb-1">Año Proy. Pecuario (Liv):</label><select id="livestockYear_s1" class="w-full focus:ring-blue-500 focus:border-blue-500"><option value="2022">2022</option><option value="2030">2030</option><option value="2040">2040</option><option value="2050">2050</option></select></div>
                     </div>
                 </div>
                 <!-- Escenario 2 -->
                 <div class="p-6 scenario-block">
                     <h4 class="text-lg font-semibold text-green-600 mb-3 border-b pb-2">Escenario 2</h4>
                     <div class="space-y-4">
-                        <div>
-                            <label for="policy_s2" class="block text-sm font-medium text-slate-700 mb-1">Política de Asignación:</label>
-                            <select id="policy_s2" class="w-full focus:ring-green-500 focus:border-green-500">
-                                <option value="FCFS">First Come First Served (FCFS)</option>
-                                <option value="PE" selected>Policy Enforced (PE)</option> 
-                            </select>
-                        </div>
-                        <div>
-                            <label for="tempChange_s2" class="block text-sm font-medium text-slate-700 mb-1">Cambio de Temperatura:</label>
-                            <select id="tempChange_s2" class="w-full focus:ring-green-500 focus:border-green-500">
-                                <option value="0">0°C</option><option value="1">+1°C</option><option value="2" selected>+2°C</option><option value="3">+3°C</option><option value="4">+4°C</option><option value="5">+5°C</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label for="precipChange_s2" class="block text-sm font-medium text-slate-700 mb-1">Cambio de Precipitación:</label>
-                            <select id="precipChange_s2" class="w-full focus:ring-green-500 focus:border-green-500">
-                                <option value="70">-30%</option><option value="80">-20%</option><option value="90" selected>-10%</option><option value="100">0%</option><option value="110">+10%</option><option value="120">+20%</option><option value="130">+30%</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label for="popYear_s2" class="block text-sm font-medium text-slate-700 mb-1">Año Proy. Población (FW):</label>
-                            <select id="popYear_s2" class="w-full focus:ring-green-500 focus:border-green-500">
-                                <option value="2022">2022</option><option value="2030">2030</option><option value="2040" selected>2040</option><option value="2050">2050</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label for="cropYear_s2" class="block text-sm font-medium text-slate-700 mb-1">Año Proy. Cultivos (Irr):</label>
-                            <select id="cropYear_s2" class="w-full focus:ring-green-500 focus:border-green-500">
-                                <option value="2022">2022</option><option value="2030">2030</option><option value="2040" selected>2040</option><option value="2050">2050</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label for="livestockYear_s2" class="block text-sm font-medium text-slate-700 mb-1">Año Proy. Pecuario (Liv):</label>
-                            <select id="livestockYear_s2" class="w-full focus:ring-green-500 focus:border-green-500">
-                                <option value="2022">2022</option><option value="2030">2030</option><option value="2040" selected>2040</option><option value="2050">2050</option>
-                            </select>
-                        </div>
+                        <div><label for="policy_s2" class="block text-sm font-medium text-slate-700 mb-1">Política de Asignación:</label><select id="policy_s2" class="w-full focus:ring-green-500 focus:border-green-500"><option value="FCFS">First Come First Served (FCFS)</option><option value="PE" selected>Policy Enforced (PE)</option></select></div>
+                        <div><label for="tempChange_s2" class="block text-sm font-medium text-slate-700 mb-1">Cambio de Temperatura:</label><select id="tempChange_s2" class="w-full focus:ring-green-500 focus:border-green-500"><option value="0">0°C</option><option value="1">+1°C</option><option value="2" selected>+2°C</option><option value="3">+3°C</option><option value="4">+4°C</option><option value="5">+5°C</option></select></div>
+                        <div><label for="precipChange_s2" class="block text-sm font-medium text-slate-700 mb-1">Cambio de Precipitación:</label><select id="precipChange_s2" class="w-full focus:ring-green-500 focus:border-green-500"><option value="70">-30%</option><option value="80">-20%</option><option value="90" selected>-10%</option><option value="100">0%</option><option value="110">+10%</option><option value="120">+20%</option><option value="130">+30%</option></select></div>
+                        <div><label for="popYear_s2" class="block text-sm font-medium text-slate-700 mb-1">Año Proy. Población (FW):</label><select id="popYear_s2" class="w-full focus:ring-green-500 focus:border-green-500"><option value="2022">2022</option><option value="2030">2030</option><option value="2040" selected>2040</option><option value="2050">2050</option></select></div>
+                        <div><label for="cropYear_s2" class="block text-sm font-medium text-slate-700 mb-1">Año Proy. Cultivos (Irr):</label><select id="cropYear_s2" class="w-full focus:ring-green-500 focus:border-green-500"><option value="2022">2022</option><option value="2030">2030</option><option value="2040" selected>2040</option><option value="2050">2050</option></select></div>
+                        <div><label for="livestockYear_s2" class="block text-sm font-medium text-slate-700 mb-1">Año Proy. Pecuario (Liv):</label><select id="livestockYear_s2" class="w-full focus:ring-green-500 focus:border-green-500"><option value="2022">2022</option><option value="2030">2030</option><option value="2040" selected>2040</option><option value="2050">2050</option></select></div>
                     </div>
                 </div>
              </div>
@@ -216,7 +164,6 @@
                 <p class="text-xs text-slate-500 text-center mb-3">(Boxplots agrupados por escenario, 2020-2070)</p>
                 <div id="plot4" class="plot-container"></div>
             </div>
-             <!-- New Row for Plots 5 and 6 -->
             <div class="lg:col-span-2 grid grid-cols-1 lg:grid-cols-2 gap-x-8 gap-y-10 mt-10">
                 <div>
                     <h2 class="text-xl font-semibold text-slate-800 mb-1 text-center">Gráfico 5: Composición Demanda Anual Promedio</h2>
@@ -238,7 +185,7 @@
     </div>
 
     <script>
-        // --- DOM Elements for Scenario 1 ---
+        // --- START OF SCRIPT ---
         const policySelect_s1 = document.getElementById('policy_s1');
         const tempChangeSelect_s1 = document.getElementById('tempChange_s1');
         const precipChangeSelect_s1 = document.getElementById('precipChange_s1');
@@ -246,8 +193,7 @@
         const cropYearSelect_s1 = document.getElementById('cropYear_s1');
         const livestockYearSelect_s1 = document.getElementById('livestockYear_s1');
         const fileNameDisplay_s1 = document.getElementById('fileNameDisplay_s1');
-
-        // --- DOM Elements for Scenario 2 ---
+        
         const policySelect_s2 = document.getElementById('policy_s2');
         const tempChangeSelect_s2 = document.getElementById('tempChange_s2');
         const precipChangeSelect_s2 = document.getElementById('precipChange_s2');
@@ -256,52 +202,28 @@
         const livestockYearSelect_s2 = document.getElementById('livestockYear_s2');
         const fileNameDisplay_s2 = document.getElementById('fileNameDisplay_s2');
         
-        // --- Common DOM Elements ---
         const generateButton = document.getElementById('generateButton');
         const fileNameDisplayContainer = document.getElementById('fileNameDisplayContainer');
+        const messageArea = document.getElementById('messageArea');
+        
         const plot1Div = document.getElementById('plot1');
         const plot2Div = document.getElementById('plot2');
         const plot3Div = document.getElementById('plot3'); 
         const plot4Div = document.getElementById('plot4'); 
-        const plot5Div = document.getElementById('plot5'); // New plot
-        const plot6Div = document.getElementById('plot6'); // New plot
-        const messageArea = document.getElementById('messageArea');
-        
-        // --- Global Variables ---
-        // ID del archivo manifest.json público en Google Drive.
+        const plot5Div = document.getElementById('plot5');
+        const plot6Div = document.getElementById('plot6');
+
+        // --- GLOBAL STATE ---
         const manifestFileId = '1FwBwdgVNv01esuocWWOEXlo6uh56Q8Ai'; 
-        let fileManifest = null; 
+        let fileManifest = null;
+        let scenario1Data, scenario2Data, scenario1Params, scenario2Params, scenario1FileName, scenario2FileName;
 
-        // --- Column Names ---
-        const ofertaAguaCols = [
-            "To_downstream_from_Casanare_cmd", "To_downstream_from_CravoSur_cmd", "To_downstream_from_Cumaral_cmd",
-            "To_downstream_from_Cusiana_cmd", "To_downstream_from_Dir_btw_ca_or_cmd", "To_downstream_from_Dir_btw_cu_ca_cmd",
-            "To_downstream_from_Dir_btw_cu_cs_cmd", "To_downstream_from_Dir_btw_gb_yu_cmd", "To_downstream_from_Dir_btw_hu_up_cmd",
-            "To_downstream_from_Dir_btw_p_ca_cmd", "To_downstream_from_Garagoa_cmd", "To_downstream_from_Guacavia_cmd",
-            "To_downstream_from_Guanapalo_cmd", "To_downstream_from_Guatiquia_cmd", "To_downstream_from_Guavio_cmd",
-            "To_downstream_from_Guayuriba_cmd", "To_downstream_from_Humea_cmd", "To_downstream_from_Lago_de_tota_cmd", 
-            "To_downstream_from_Lengupa_cmd", "To_downstream_from_Manacacias_cmd", "To_downstream_from_Melua_cmd",
-            "To_downstream_from_Metica_cmd", "To_downstream_from_Negro_cmd", "To_downstream_from_Pauto_cmd",
-            "To_downstream_from_Tua_cmd", "To_downstream_from_Upia_cmd", "To_downstream_from_Yucao_cmd"
-        ];
+        // --- COLUMN DEFINITIONS ---
+        const ofertaAguaCols = ["To_downstream_from_Casanare_cmd", "To_downstream_from_CravoSur_cmd", "To_downstream_from_Cumaral_cmd", "To_downstream_from_Cusiana_cmd", "To_downstream_from_Dir_btw_ca_or_cmd", "To_downstream_from_Dir_btw_cu_ca_cmd", "To_downstream_from_Dir_btw_cu_cs_cmd", "To_downstream_from_Dir_btw_gb_yu_cmd", "To_downstream_from_Dir_btw_hu_up_cmd", "To_downstream_from_Dir_btw_p_ca_cmd", "To_downstream_from_Garagoa_cmd", "To_downstream_from_Guacavia_cmd", "To_downstream_from_Guanapalo_cmd", "To_downstream_from_Guatiquia_cmd", "To_downstream_from_Guavio_cmd", "To_downstream_from_Guayuriba_cmd", "To_downstream_from_Humea_cmd", "To_downstream_from_Lago_de_tota_cmd", "To_downstream_from_Lengupa_cmd", "To_downstream_from_Manacacias_cmd", "To_downstream_from_Melua_cmd", "To_downstream_from_Metica_cmd", "To_downstream_from_Negro_cmd", "To_downstream_from_Pauto_cmd", "To_downstream_from_Tua_cmd", "To_downstream_from_Upia_cmd", "To_downstream_from_Yucao_cmd"];
+        const demandaAguaCols = ["Denv_Casanare_cmd", "Denv_CravoSur_cmd", "Denv_Cumaral_cmd", "Denv_Cusiana_cmd", "Denv_Dir_btw_ca_or_cmd", "Denv_Dir_btw_cu_ca_cmd", "Denv_Dir_btw_cu_cs_cmd", "Denv_Dir_btw_gb_yu_cmd", "Denv_Dir_btw_hu_up_cmd", "Denv_Dir_btw_p_ca_cmd", "Denv_Garagoa_cmd", "Denv_Guacavia_cmd", "Denv_Guanapalo_cmd", "Denv_Guatiquia_cmd", "Denv_Guavio_cmd", "Denv_Guayuriba_cmd", "Denv_Humea_cmd", "Denv_Lago_de_tota_cmd", "Denv_Lengupa_cmd", "Denv_Manacacias_cmd", "Denv_Melua_cmd", "Denv_Metica_cmd", "Denv_Negro_cmd", "Denv_Pauto_cmd", "Denv_Tua_cmd", "Denv_Upia_cmd", "Denv_Yucao_cmd","Dfwr_Casanare_cmd", "Dfwr_CravoSur_cmd", "Dfwr_Cumaral_cmd", "Dfwr_Cusiana_cmd", "Dfwr_Dir_btw_ca_or_cmd", "Dfwr_Dir_btw_cu_ca_cmd", "Dfwr_Dir_btw_cu_cs_cmd", "Dfwr_Dir_btw_gb_yu_cmd", "Dfwr_Dir_btw_hu_up_cmd", "Dfwr_Dir_btw_p_ca_cmd", "Dfwr_Garagoa_cmd", "Dfwr_Guacavia_cmd", "Dfwr_Guanapalo_cmd", "Dfwr_Guatiquia_cmd", "Dfwr_Guavio_cmd", "Dfwr_Guayuriba_cmd", "Dfwr_Humea_cmd", "Dfwr_Lago_de_tota_cmd", "Dfwr_Lengupa_cmd", "Dfwr_Manacacias_cmd", "Dfwr_Melua_cmd", "Dfwr_Metica_cmd", "Dfwr_Negro_cmd", "Dfwr_Pauto_cmd", "Dfwr_Tua_cmd", "Dfwr_Upia_cmd", "Dfwr_Yucao_cmd", "Dfwu_Casanare_cmd", "Dfwu_CravoSur_cmd", "Dfwu_Cumaral_cmd", "Dfwu_Cusiana_cmd", "Dfwu_Dir_btw_ca_or_cmd", "Dfwu_Dir_btw_cu_ca_cmd", "Dfwu_Dir_btw_cu_cs_cmd", "Dfwu_Dir_btw_gb_yu_cmd", "Dfwu_Dir_btw_hu_up_cmd", "Dfwu_Dir_btw_p_ca_cmd", "Dfwu_Garagoa_cmd", "Dfwu_Guacavia_cmd", "Dfwu_Guanapalo_cmd", "Dfwu_Guatiquia_cmd", "Dfwu_Guavio_cmd", "Dfwu_Guayuriba_cmd", "Dfwu_Humea_cmd", "Dfwu_Lago_de_tota_cmd", "Dfwu_Lengupa_cmd", "Dfwu_Manacacias_cmd", "Dfwu_Melua_cmd", "Dfwu_Metica_cmd", "Dfwu_Negro_cmd", "Dfwu_Pauto_cmd", "Dfwu_Tua_cmd", "Dfwu_Upia_cmd", "Dfwu_Yucao_cmd", "Dirr_Casanare_cmd", "Dirr_CravoSur_cmd", "Dirr_Cumaral_cmd", "Dirr_Cusiana_cmd", "Dirr_Dir_btw_ca_or_cmd", "Dirr_Dir_btw_cu_ca_cmd", "Dirr_Dir_btw_cu_cs_cmd", "Dirr_Dir_btw_gb_yu_cmd", "Dirr_Dir_btw_hu_up_cmd", "Dirr_Dir_btw_p_ca_cmd", "Dirr_Garagoa_cmd", "Dirr_Guacavia_cmd", "Dirr_Guanapalo_cmd", "Dirr_Guatiquia_cmd", "Dirr_Guavio_cmd", "Dirr_Guayuriba_cmd", "Dirr_Humea_cmd", "Dirr_Lago_de_tota_cmd", "Dirr_Lengupa_cmd", "Dirr_Manacacias_cmd", "Dirr_Melua_cmd", "Dirr_Metica_cmd", "Dirr_Negro_cmd", "Dirr_Pauto_cmd", "Dirr_Tua_cmd", "Dirr_Upia_cmd", "Dirr_Yucao_cmd", "Dliv_Casanare_cmd", "Dliv_CravoSur_cmd", "Dliv_Cumaral_cmd", "Dliv_Cusiana_cmd", "Dliv_Dir_btw_ca_or_cmd", "Dliv_Dir_btw_cu_ca_cmd", "Dliv_Dir_btw_cu_cs_cmd", "Dliv_Dir_btw_gb_yu_cmd", "Dliv_Dir_btw_hu_up_cmd", "Dliv_Dir_btw_p_ca_cmd", "Dliv_Garagoa_cmd", "Dliv_Guacavia_cmd", "Dliv_Guanapalo_cmd", "Dliv_Guatiquia_cmd", "Dliv_Guavio_cmd", "Dliv_Guayuriba_cmd", "Dliv_Humea_cmd", "Dliv_Lago_de_tota_cmd", "Dliv_Lengupa_cmd", "Dliv_Manacacias_cmd", "Dliv_Melua_cmd", "Dliv_Metica_cmd", "Dliv_Negro_cmd", "Dliv_Pauto_cmd", "Dliv_Tua_cmd", "Dliv_Upia_cmd", "Dliv_Yucao_cmd"];
+        const demandComponents = { ambiental: demandaAguaCols.filter(c => c.startsWith('Denv_')), rural: demandaAguaCols.filter(c => c.startsWith('Dfwr_')), urbano: demandaAguaCols.filter(c => c.startsWith('Dfwu_')), irrigacion: demandaAguaCols.filter(c => c.startsWith('Dirr_')), animal: demandaAguaCols.filter(c => c.startsWith('Dliv_'))};
         
-        const demandaAguaCols = [
-            "Denv_Casanare_cmd", "Denv_CravoSur_cmd", "Denv_Cumaral_cmd", "Denv_Cusiana_cmd", "Denv_Dir_btw_ca_or_cmd", "Denv_Dir_btw_cu_ca_cmd", "Denv_Dir_btw_cu_cs_cmd", "Denv_Dir_btw_gb_yu_cmd", "Denv_Dir_btw_hu_up_cmd", "Denv_Dir_btw_p_ca_cmd", "Denv_Garagoa_cmd", "Denv_Guacavia_cmd", "Denv_Guanapalo_cmd", "Denv_Guatiquia_cmd", "Denv_Guavio_cmd", "Denv_Guayuriba_cmd", "Denv_Humea_cmd", "Denv_Lago_de_tota_cmd", "Denv_Lengupa_cmd", "Denv_Manacacias_cmd", "Denv_Melua_cmd", "Denv_Metica_cmd", "Denv_Negro_cmd", "Denv_Pauto_cmd", "Denv_Tua_cmd", "Denv_Upia_cmd", "Denv_Yucao_cmd",
-            "Dfwr_Casanare_cmd", "Dfwr_CravoSur_cmd", "Dfwr_Cumaral_cmd", "Dfwr_Cusiana_cmd", "Dfwr_Dir_btw_ca_or_cmd", "Dfwr_Dir_btw_cu_ca_cmd", "Dfwr_Dir_btw_cu_cs_cmd", "Dfwr_Dir_btw_gb_yu_cmd", "Dfwr_Dir_btw_hu_up_cmd", "Dfwr_Dir_btw_p_ca_cmd", "Dfwr_Garagoa_cmd", "Dfwr_Guacavia_cmd", "Dfwr_Guanapalo_cmd", "Dfwr_Guatiquia_cmd", "Dfwr_Guavio_cmd", "Dfwr_Guayuriba_cmd", "Dfwr_Humea_cmd", "Dfwr_Lago_de_tota_cmd", "Dfwr_Lengupa_cmd", "Dfwr_Manacacias_cmd", "Dfwr_Melua_cmd", "Dfwr_Metica_cmd", "Dfwr_Negro_cmd", "Dfwr_Pauto_cmd", "Dfwr_Tua_cmd", "Dfwr_Upia_cmd", "Dfwr_Yucao_cmd",
-            "Dfwu_Casanare_cmd", "Dfwu_CravoSur_cmd", "Dfwu_Cumaral_cmd", "Dfwu_Cusiana_cmd", "Dfwu_Dir_btw_ca_or_cmd", "Dfwu_Dir_btw_cu_ca_cmd", "Dfwu_Dir_btw_cu_cs_cmd", "Dfwu_Dir_btw_gb_yu_cmd", "Dfwu_Dir_btw_hu_up_cmd", "Dfwu_Dir_btw_p_ca_cmd", "Dfwu_Garagoa_cmd", "Dfwu_Guacavia_cmd", "Dfwu_Guanapalo_cmd", "Dfwu_Guatiquia_cmd", "Dfwu_Guavio_cmd", "Dfwu_Guayuriba_cmd", "Dfwu_Humea_cmd", "Dfwu_Lago_de_tota_cmd", "Dfwu_Lengupa_cmd", "Dfwu_Manacacias_cmd", "Dfwu_Melua_cmd", "Dfwu_Metica_cmd", "Dfwu_Negro_cmd", "Dfwu_Pauto_cmd", "Dfwu_Tua_cmd", "Dfwu_Upia_cmd", "Dfwu_Yucao_cmd",
-            "Dirr_Casanare_cmd", "Dirr_CravoSur_cmd", "Dirr_Cumaral_cmd", "Dirr_Cusiana_cmd", "Dirr_Dir_btw_ca_or_cmd", "Dirr_Dir_btw_cu_ca_cmd", "Dirr_Dir_btw_cu_cs_cmd", "Dirr_Dir_btw_gb_yu_cmd", "Dirr_Dir_btw_hu_up_cmd", "Dirr_Dir_btw_p_ca_cmd", "Dirr_Garagoa_cmd", "Dirr_Guacavia_cmd", "Dirr_Guanapalo_cmd", "Dirr_Guatiquia_cmd", "Dirr_Guavio_cmd", "Dirr_Guayuriba_cmd", "Dirr_Humea_cmd", "Dirr_Lago_de_tota_cmd", "Dirr_Lengupa_cmd", "Dirr_Manacacias_cmd", "Dirr_Melua_cmd", "Dirr_Metica_cmd", "Dirr_Negro_cmd", "Dirr_Pauto_cmd", "Dirr_Tua_cmd", "Dirr_Upia_cmd", "Dirr_Yucao_cmd",
-            "Dliv_Casanare_cmd", "Dliv_CravoSur_cmd", "Dliv_Cumaral_cmd", "Dliv_Cusiana_cmd", "Dliv_Dir_btw_ca_or_cmd", "Dliv_Dir_btw_cu_ca_cmd", "Dliv_Dir_btw_cu_cs_cmd", "Dliv_Dir_btw_gb_yu_cmd", "Dliv_Dir_btw_hu_up_cmd", "Dliv_Dir_btw_p_ca_cmd", "Dliv_Garagoa_cmd", "Dliv_Guacavia_cmd", "Dliv_Guanapalo_cmd", "Dliv_Guatiquia_cmd", "Dliv_Guavio_cmd", "Dliv_Guayuriba_cmd", "Dliv_Humea_cmd", "Dliv_Lago_de_tota_cmd", "Dliv_Lengupa_cmd", "Dliv_Manacacias_cmd", "Dliv_Melua_cmd", "Dliv_Metica_cmd", "Dliv_Negro_cmd", "Dliv_Pauto_cmd", "Dliv_Tua_cmd", "Dliv_Upia_cmd", "Dliv_Yucao_cmd"
-        ];
-
-        const demandComponents = {
-            ambiental: demandaAguaCols.filter(c => c.startsWith('Denv_')),
-            rural: demandaAguaCols.filter(c => c.startsWith('Dfwr_')),
-            urbano: demandaAguaCols.filter(c => c.startsWith('Dfwu_')),
-            irrigacion: demandaAguaCols.filter(c => c.startsWith('Dirr_')),
-            animal: demandaAguaCols.filter(c => c.startsWith('Dliv_'))
-        };
-        
-        // --- Helper Functions ---
+        // --- HELPER FUNCTIONS ---
         function showMessage(text, type = 'info') {
             messageArea.textContent = text;
             messageArea.style.display = 'block';
@@ -311,28 +233,25 @@
             } else if (type === 'success') {
                 messageArea.className = baseClasses + 'bg-green-100 text-green-700 border border-green-300';
             } else if (type === 'warning') {
-                 messageArea.className = baseClasses + 'bg-yellow-100 text-yellow-700 border border-yellow-300';
-            } else { // info
+                messageArea.className = baseClasses + 'bg-yellow-100 text-yellow-700 border border-yellow-300';
+            } else {
                 messageArea.className = baseClasses + 'bg-blue-100 text-blue-700 border border-blue-300';
             }
         }
         
-        // --- Core Logic ---
+        // --- INITIALIZATION ---
         document.addEventListener('DOMContentLoaded', async () => {
             clearAllPlots("Inicializando y cargando índice de archivos desde la nube...");
             generateButton.disabled = true;
-
-            if (manifestFileId === 'ID_DE_TU_ARCHIVO_MANIFEST.JSON_AQUÍ') {
-                showMessage('Configuración requerida: Por favor, edite el archivo HTML y reemplace "ID_DE_TU_ARCHIVO_MANIFEST.JSON_AQUÍ" con el ID de su archivo manifest.json de Google Drive.', 'error');
+            if (!manifestFileId || manifestFileId === 'ID_DE_TU_ARCHIVO_MANIFEST.JSON_AQUÍ') {
+                showMessage('Configuración requerida: Por favor, edite el archivo HTML y reemplace el valor de "manifestFileId".', 'error');
                 clearAllPlots("Error de Configuración. Revise el mensaje de arriba.");
                 return;
             }
-
             try {
                 const googleDriveUrl = `https://drive.google.com/uc?export=download&id=${manifestFileId}`;
                 const proxyUrl = 'https://corsproxy.io/?';
                 const manifestUrl = proxyUrl + encodeURIComponent(googleDriveUrl);
-                
                 const response = await fetch(manifestUrl);
                 if (!response.ok) throw new Error(`Error de red al buscar el manifiesto: ${response.statusText} (Status: ${response.status})`);
                 fileManifest = await response.json();
@@ -345,85 +264,70 @@
                 clearAllPlots("Error al cargar el índice de archivos. La aplicación no puede continuar.");
             }
         });
-
+        
+        // --- CORE LOGIC ---
         generateButton.addEventListener('click', async () => {
-            messageArea.style.display = 'none';
-            fileNameDisplayContainer.style.display = 'block'; 
-            fileNameDisplay_s1.textContent = "";
-            fileNameDisplay_s2.textContent = "";
-            clearAllPlots("Procesando... Por favor, espere mientras se cargan los datos desde la nube.");
-            generateButton.disabled = true;
+             messageArea.style.display = 'none';
+             fileNameDisplayContainer.style.display = 'block'; 
+             fileNameDisplay_s1.textContent = "";
+             fileNameDisplay_s2.textContent = "";
+             clearAllPlots("Procesando... Por favor, espere mientras se cargan los datos desde la nube.");
+             generateButton.disabled = true;
 
-            if (!fileManifest) {
-                showMessage("El manifiesto de archivos no está cargado. Por favor, recargue la página.", 'error');
-                generateButton.disabled = false;
-                return;
-            }
+             if (!fileManifest) {
+                 showMessage("El manifiesto de archivos no está cargado. Por favor, recargue la página.", 'error');
+                 generateButton.disabled = false;
+                 return;
+             }
 
-            // --- Get parameters and construct filenames ---
-            const replica_s1 = Math.floor(Math.random() * 5) + 1;
-            const params_s1 = {
-                policy: policySelect_s1.value, replica: replica_s1, tempChange: tempChangeSelect_s1.value,
-                precipChange: precipChangeSelect_s1.value, popYear: popYearSelect_s1.value,
-                cropYear: cropYearSelect_s1.value, livestockYear: livestockYearSelect_s1.value
-            };
-            const targetFileName_s1 = `OWF_${params_s1.policy}_R${params_s1.replica}_DT${params_s1.tempChange}_DP${params_s1.precipChange}_FW${params_s1.popYear}_Irr${params_s1.cropYear}_Liv${params_s1.livestockYear}.csv`;
-            
-            const replica_s2 = Math.floor(Math.random() * 5) + 1;
-            const params_s2 = {
-                policy: policySelect_s2.value, replica: replica_s2, tempChange: tempChangeSelect_s2.value,
-                precipChange: precipChangeSelect_s2.value, popYear: popYearSelect_s2.value,
-                cropYear: cropYearSelect_s2.value, livestockYear: livestockYearSelect_s2.value
-            };
-            const targetFileName_s2 = `OWF_${params_s2.policy}_R${params_s2.replica}_DT${params_s2.tempChange}_DP${params_s2.precipChange}_FW${params_s2.popYear}_Irr${params_s2.cropYear}_Liv${params_s2.livestockYear}.csv`;
+             // Define scenario 1
+             const replica_s1 = Math.floor(Math.random() * 5) + 1;
+             scenario1Params = { policy: policySelect_s1.value, replica: replica_s1, tempChange: tempChangeSelect_s1.value, precipChange: precipChangeSelect_s1.value, popYear: popYearSelect_s1.value, cropYear: cropYearSelect_s1.value, livestockYear: livestockYearSelect_s1.value };
+             scenario1FileName = `OWF_${scenario1Params.policy}_R${scenario1Params.replica}_DT${scenario1Params.tempChange}_DP${scenario1Params.precipChange}_FW${scenario1Params.popYear}_Irr${scenario1Params.cropYear}_Liv${scenario1Params.livestockYear}.csv`;
+             
+             // Define scenario 2
+             const replica_s2 = Math.floor(Math.random() * 5) + 1;
+             scenario2Params = { policy: policySelect_s2.value, replica: replica_s2, tempChange: tempChangeSelect_s2.value, precipChange: precipChangeSelect_s2.value, popYear: popYearSelect_s2.value, cropYear: cropYearSelect_s2.value, livestockYear: livestockYearSelect_s2.value };
+             scenario2FileName = `OWF_${scenario2Params.policy}_R${scenario2Params.replica}_DT${scenario2Params.tempChange}_DP${scenario2Params.precipChange}_FW${scenario2Params.popYear}_Irr${scenario2Params.cropYear}_Liv${scenario2Params.livestockYear}.csv`;
 
-            fileNameDisplay_s1.textContent = `Buscando: ${targetFileName_s1}`;
-            fileNameDisplay_s2.textContent = `Buscando: ${targetFileName_s2}`;
-            
-            let csvDataScenario1 = null;
-            let csvDataScenario2 = null;
-            const messageLog = [];
-            let hasError = false;
+             fileNameDisplay_s1.textContent = `Buscando: ${scenario1FileName}`;
+             fileNameDisplay_s2.textContent = `Buscando: ${scenario2FileName}`;
+             
+             const messageLog = [];
+             let hasError = false;
+             
+             // Fetch data for both scenarios
+             try {
+                 scenario1Data = await getCsvDataFromDrive(scenario1FileName);
+                 messageLog.push(`✓ Escenario 1 (R${replica_s1}): Cargado.`);
+                 fileNameDisplay_s1.innerHTML = `<span class="text-green-600 font-semibold">Cargado:</span> ${scenario1FileName}`;
+             } catch (error) {
+                 hasError = true; scenario1Data = null;
+                 messageLog.push(`✗ Escenario 1 (R${replica_s1}): ${error.message}`);
+                 fileNameDisplay_s1.innerHTML = `<span class="text-red-600 font-semibold">Error:</span> ${error.message}`;
+             }
+             
+             try {
+                 scenario2Data = await getCsvDataFromDrive(scenario2FileName);
+                 messageLog.push(`✓ Escenario 2 (R${replica_s2}): Cargado.`);
+                 fileNameDisplay_s2.innerHTML = `<span class="text-green-600 font-semibold">Cargado:</span> ${scenario2FileName}`;
+             } catch (error) {
+                 hasError = true; scenario2Data = null;
+                 messageLog.push(`✗ Escenario 2 (R${replica_s2}): ${error.message}`);
+                 fileNameDisplay_s2.innerHTML = `<span class="text-red-600 font-semibold">Error:</span> ${error.message}`;
+             }
+             
+             // Process and display results
+             if (!scenario1Data && !scenario2Data) {
+                 const finalErrorMessage = "No se pudieron cargar los datos para ningún escenario. Verifique los siguientes errores:\n\n" + messageLog.join('\n');
+                 showMessage(finalErrorMessage, 'error');
+                 clearAllPlots("Error en la carga de datos.");
+             } else {
+                 showMessage(messageLog.join('\n'), hasError ? 'warning' : 'success');
+                 processAndDrawAllPlots(scenario1Data, scenario2Data);
+             }
 
-            // --- Fetch Scenario 1 Data ---
-            try {
-                console.log(`Intentando cargar Escenario 1: ${targetFileName_s1}`);
-                csvDataScenario1 = await getCsvDataFromDrive(targetFileName_s1);
-                messageLog.push(`✓ Escenario 1 (R${replica_s1}): Cargado.`);
-                fileNameDisplay_s1.innerHTML = `<span class="text-green-600 font-semibold">Cargado:</span> ${targetFileName_s1}`;
-            } catch (error) {
-                hasError = true;
-                console.error("Error Escenario 1:", error);
-                const errorMessage = `✗ Escenario 1 (R${replica_s1}): ${error.message}`;
-                messageLog.push(errorMessage);
-                fileNameDisplay_s1.innerHTML = `<span class="text-red-600 font-semibold">Error:</span> ${error.message}`;
-            }
-            
-            // --- Fetch Scenario 2 Data ---
-            try {
-                console.log(`Intentando cargar Escenario 2: ${targetFileName_s2}`);
-                csvDataScenario2 = await getCsvDataFromDrive(targetFileName_s2);
-                messageLog.push(`✓ Escenario 2 (R${replica_s2}): Cargado.`);
-                fileNameDisplay_s2.innerHTML = `<span class="text-green-600 font-semibold">Cargado:</span> ${targetFileName_s2}`;
-            } catch (error) {
-                hasError = true;
-                console.error("Error Escenario 2:", error);
-                const errorMessage = `✗ Escenario 2 (R${replica_s2}): ${error.message}`;
-                messageLog.push(errorMessage);
-                fileNameDisplay_s2.innerHTML = `<span class="text-red-600 font-semibold">Error:</span> ${error.message}`;
-            }
-            
-            // --- Final Message and Plotting ---
-            if (hasError) {
-                const finalErrorMessage = "No se pudieron cargar los datos. Verifique los siguientes errores y que los nombres de archivo coincidan con el manifiesto:\n\n" + messageLog.join('\n');
-                showMessage(finalErrorMessage, 'error');
-                clearAllPlots("Error en la carga de datos. Verifique los mensajes de error.");
-            } else {
-                showMessage(messageLog.join('\n'), 'success');
-                processAndDrawAllPlots(csvDataScenario1, csvDataScenario2);
-            }
-
-            generateButton.disabled = false;
+             generateButton.disabled = false;
         });
 
         async function getCsvDataFromDrive(fileName) {
@@ -431,17 +335,14 @@
             if (!fileId) {
                 throw new Error(`Archivo no encontrado en el manifiesto: ${fileName}`);
             }
-            
             const googleDriveUrl = `https://drive.google.com/uc?export=download&id=${fileId}`;
             const proxyUrl = 'https://corsproxy.io/?';
             const fileUrl = proxyUrl + encodeURIComponent(googleDriveUrl);
-
             const response = await fetch(fileUrl);
             if (!response.ok) {
                 throw new Error(`No se pudo descargar el archivo ${fileName}. Estado de red: ${response.status}`);
             }
             const csvText = await response.text();
-            
             return new Promise((resolve, reject) => {
                 Papa.parse(csvText, {
                     header: true,
@@ -452,7 +353,7 @@
                             console.error("Errores de Parseo CSV:", results.errors);
                             reject(new Error(`Error al parsear CSV: ${results.errors[0].message}`));
                         } else if (!results.data || results.data.length === 0) {
-                             reject(new Error(`El archivo CSV '${fileName}' está vacío o tiene un formato incorrecto.`));
+                            reject(new Error(`El archivo CSV '${fileName}' está vacío o tiene un formato incorrecto.`));
                         } else {
                             resolve(results.data);
                         }
@@ -461,33 +362,26 @@
                 });
             });
         }
-
-        // --- REWRITTEN DATA PROCESSING FUNCTION ---
-        function processAndDrawAllPlots(dataS1, dataS2) { 
+        
+        // --- PLOTTING LOGIC (PROCESSING) ---
+        function processAndDrawAllPlots(dataS1, dataS2) {
             const START_YEAR = 2020;
-            const END_YEAR_PLOTS = 2070; 
+            const END_YEAR_PLOTS = 2070;
 
-            // Helper function to calculate annual totals for a given dataset and column list
             const calculateAnnualTotals = (data, columns) => {
                 const annualTotals = {};
-                for (let y = START_YEAR; y <= END_YEAR_PLOTS; y++) {
-                    annualTotals[y] = 0;
-                }
+                for (let y = START_YEAR; y <= END_YEAR_PLOTS; y++) { annualTotals[y] = 0; }
                 if (!data) return annualTotals;
-
                 data.forEach(row => {
                     if (!row || !row.Date) return;
-                    const date = new Date(row.Date + 'T00:00:00Z'); // Force UTC to avoid timezone issues
-                    if (isNaN(date.getTime())) return; 
-                    
+                    const date = new Date(row.Date + 'T00:00:00Z');
+                    if (isNaN(date.getTime())) return;
                     const year = date.getUTCFullYear();
                     if (year in annualTotals) {
                         let recordSum = 0;
                         columns.forEach(col => {
                             const value = parseFloat(row[col]);
-                            if (!isNaN(value)) {
-                                recordSum += value;
-                            }
+                            if (!isNaN(value)) { recordSum += value; }
                         });
                         annualTotals[year] += recordSum;
                     }
@@ -501,7 +395,6 @@
             const annualDemandS2 = calculateAnnualTotals(dataS2, demandaAguaCols);
             
             let years = Object.keys(annualSupplyS1).map(Number).sort();
-
             const plotDataSupplyS1 = years.map(year => annualSupplyS1[year]);
             const plotDataSupplyS2 = years.map(year => annualSupplyS2[year]);
             const plotDataDemandS1 = years.map(year => annualDemandS1[year]);
@@ -510,19 +403,16 @@
             drawPlot1_SupplyLines(years, plotDataSupplyS1, plotDataSupplyS2);
             drawPlot3_DemandLines(years, plotDataDemandS1, plotDataDemandS2);
 
-            // --- Process and draw monthly boxplots ---
             const calculateMonthlyDistribution = (data, columns) => {
                 const monthlyDist = Array(12).fill(null).map(() => []);
-                 if (!data) return monthlyDist;
-
+                if (!data) return monthlyDist;
                 data.forEach(row => {
                     if (!row || !row.Date) return;
                     const dateObj = new Date(row.Date + 'T00:00:00Z');
-                    if (isNaN(dateObj.getTime())) return; 
-                    
+                    if (isNaN(dateObj.getTime())) return;
                     const year = dateObj.getUTCFullYear();
-                    if (year >= START_YEAR && year <= END_YEAR_PLOTS) { 
-                        const month = dateObj.getUTCMonth(); 
+                    if (year >= START_YEAR && year <= END_YEAR_PLOTS) {
+                        const month = dateObj.getUTCMonth();
                         let monthlySum = 0;
                         columns.forEach(col => monthlySum += (parseFloat(row[col]) || 0));
                         monthlyDist[month].push(monthlySum);
@@ -539,7 +429,6 @@
             drawPlot2_SupplyBoxplots(monthlyDistributionSupplyS1, monthlyDistributionSupplyS2);
             drawPlot4_DemandBoxplots(monthlyDistributionDemandS1, monthlyDistributionDemandS2);
 
-            // --- Process data for new composition plots (5 & 6) ---
             const annualCompS1 = calculateAnnualComposition(dataS1);
             const annualCompS2 = calculateAnnualComposition(dataS2);
             drawPlot5_AnnualComposition(annualCompS1, annualCompS2);
@@ -552,20 +441,14 @@
         function calculateAnnualComposition(data) {
             const totals = { ambiental: 0, rural: 0, urbano: 0, irrigacion: 0, animal: 0 };
             if (!data) return totals;
-
-            let recordCount = 0;
             data.forEach(row => {
-                recordCount++;
                 for (const component in demandComponents) {
                     demandComponents[component].forEach(col => {
                         const value = parseFloat(row[col]);
-                        if (!isNaN(value)) {
-                            totals[component] += value;
-                        }
+                        if (!isNaN(value)) { totals[component] += value; }
                     });
                 }
             });
-            
             const grandTotal = Object.values(totals).reduce((sum, val) => sum + val, 0);
             const percentages = {};
             if (grandTotal > 0) {
@@ -577,185 +460,65 @@
         }
 
         function calculateMonthlyComposition(data) {
-            const monthlyTotals = {};
-            const monthCounts = {};
-            for (let i = 0; i < 12; i++) {
-                monthlyTotals[i] = { ambiental: 0, rural: 0, urbano: 0, irrigacion: 0, animal: 0 };
-                monthCounts[i] = 0;
-            }
-
+            const monthlyTotals = Array(12).fill(null).map(() => ({ ambiental: 0, rural: 0, urbano: 0, irrigacion: 0, animal: 0 }));
             if (!data) return [];
-            
             data.forEach(row => {
                 if (!row || !row.Date) return;
                 const date = new Date(row.Date + 'T00:00:00Z');
                 if (isNaN(date.getTime())) return;
-
                 const month = date.getUTCMonth();
-                monthCounts[month]++;
-
                 for (const component in demandComponents) {
                     demandComponents[component].forEach(col => {
                         const value = parseFloat(row[col]);
-                        if (!isNaN(value)) {
-                            monthlyTotals[month][component] += value;
-                        }
+                        if (!isNaN(value)) { monthlyTotals[month][component] += value; }
                     });
                 }
             });
-
             const monthlyPercentages = [];
             for (let i = 0; i < 12; i++) {
                 const monthTotal = Object.values(monthlyTotals[i]).reduce((sum, val) => sum + val, 0);
                 const percentages = {};
                 if (monthTotal > 0) {
                     for (const component in monthlyTotals[i]) {
-                         percentages[component] = (monthlyTotals[i][component] / monthTotal) * 100;
+                        percentages[component] = (monthlyTotals[i][component] / monthTotal) * 100;
                     }
                 }
                 monthlyPercentages.push(percentages);
             }
             return monthlyPercentages;
         }
-
-
-        // --- Plotting Functions ---
-        const commonPlotLayout = {
-            margin: { l: 80, r: 30, b: 60, t: 30, pad: 5 },
-            legend: {orientation: 'h', yanchor: 'bottom', y: 1.02, xanchor: 'right', x:1, font: {size: 11}}, 
-            autosize: true, paper_bgcolor: '#f9fafb', plot_bgcolor: '#f9fafb',
-            xaxis: {
-                showline: true, linewidth: 1, linecolor: '#666', ticks: 'outside', 
-                titlefont: {size: 14, color: '#4b5563'}, tickfont: {size: 12, color: '#6b7280'}
-            },
-            yaxis: { titlefont: {size: 14, color: '#4b5563'}, tickfont: {size: 12, color: '#6b7280'} }
-        };
-
-        function drawPlot1_SupplyLines(years, s1Data, s2Data) { 
-            const traceS1 = { x: years, y: s1Data, mode: 'lines+markers', name: 'Oferta S1', line: {color: '#3b82f6'}, marker: {size: 5} }; 
-            const traceS2 = { x: years, y: s2Data, mode: 'lines+markers', name: 'Oferta S2', line: {color: '#16a34a'}, marker: {size: 5} }; 
-            const layout = { ...commonPlotLayout,
-                xaxis: { ...commonPlotLayout.xaxis, title: { text: null } }, 
-                yaxis: { ...commonPlotLayout.yaxis, title: 'Oferta Total Anual (cmd)' }
-            };
-            Plotly.newPlot(plot1Div, [traceS1, traceS2], layout, {responsive: true});
-        }
-
-        function drawPlot2_SupplyBoxplots(monthlyDataS1, monthlyDataS2) {
-            const monthNames = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
-            const traceS1 = { y: [].concat(...monthlyDataS1), x: monthNames.flatMap(m => Array(monthlyDataS1[monthNames.indexOf(m)].length).fill(m)), type: 'box', name: 'Oferta S1', marker: { color: '#3b82f6' }, boxpoints: 'Outliers'};
-            const traceS2 = { y: [].concat(...monthlyDataS2), x: monthNames.flatMap(m => Array(monthlyDataS2[monthNames.indexOf(m)].length).fill(m)), type: 'box', name: 'Oferta S2', marker: { color: '#16a34a' }, boxpoints: 'Outliers'};
-            const layout = { ...commonPlotLayout,
-                yaxis: { ...commonPlotLayout.yaxis, title: 'Oferta Hídrica Mensual (cmd)', zeroline: false },
-                xaxis: { ...commonPlotLayout.xaxis, title: { text: null }, type: 'category' },
-                boxmode: 'group', showlegend: true
-            };
-            Plotly.newPlot(plot2Div, [traceS1, traceS2], layout, {responsive: true});
-        }
         
-        function drawPlot3_DemandLines(years, s1Data, s2Data) { 
-            const traceS1 = { x: years, y: s1Data, mode: 'lines+markers', name: 'Demanda S1', line: {color: '#ef4444'}, marker: {size: 5} }; 
-            const traceS2 = { x: years, y: s2Data, mode: 'lines+markers', name: 'Demanda S2', line: {color: '#f97316'}, marker: {size: 5} }; 
-            const layout = { ...commonPlotLayout,
-                xaxis: { ...commonPlotLayout.xaxis, title: { text: null } },
-                yaxis: { ...commonPlotLayout.yaxis, title: 'Demanda Total Anual (cmd)' }
-            };
-            Plotly.newPlot(plot3Div, [traceS1, traceS2], layout, {responsive: true});
-        }
-
-        function drawPlot4_DemandBoxplots(monthlyDataS1, monthlyDataS2) {
-            const monthNames = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
-            const traceS1 = { y: [].concat(...monthlyDataS1), x: monthNames.flatMap(m => Array(monthlyDataS1[monthNames.indexOf(m)].length).fill(m)), type: 'box', name: 'Demanda S1', marker: { color: '#ef4444' }, boxpoints: 'Outliers'};
-            const traceS2 = { y: [].concat(...monthlyDataS2), x: monthNames.flatMap(m => Array(monthlyDataS2[monthNames.indexOf(m)].length).fill(m)), type: 'box', name: 'Demanda S2', marker: { color: '#f97316' }, boxpoints: 'Outliers'};
-            const layout = { ...commonPlotLayout,
-                yaxis: { ...commonPlotLayout.yaxis, title: 'Demanda Hídrica Mensual (cmd)', zeroline: false },
-                xaxis: { ...commonPlotLayout.xaxis, title: { text: null }, type: 'category' },
-                boxmode: 'group', showlegend: true
-            };
-            Plotly.newPlot(plot4Div, [traceS1, traceS2], layout, {responsive: true});
-        }
-
-        function drawPlot5_AnnualComposition(compS1, compS2) {
-            const componentNames = { ambiental: 'Ambiental', rural: 'Rural', urbano: 'Urbano', irrigacion: 'Irrigación', animal: 'Animal' };
-            const colors = { ambiental: '#2dd4bf', rural: '#fbbf24', urbano: '#f87171', irrigacion: '#60a5fa', animal: '#c084fc' };
-            const traces = [];
-
-            for (const component in compS1) {
-                traces.push({
-                    x: ['Escenario 1', 'Escenario 2'],
-                    y: [compS1[component] || 0, compS2[component] || 0],
-                    name: componentNames[component],
-                    type: 'bar',
-                    marker: { color: colors[component] }
-                });
-            }
-
-            const layout = { ...commonPlotLayout,
-                barmode: 'stack',
-                yaxis: { ...commonPlotLayout.yaxis, title: 'Aporte a la Demanda (%)', ticksuffix: '%' },
-                xaxis: { ...commonPlotLayout.xaxis, title: { text: null } }
-            };
-            Plotly.newPlot(plot5Div, traces, layout, {responsive: true});
-        }
+        // --- PLOTTING LOGIC (DRAWING) ---
+        const commonPlotLayout = { margin: { l: 80, r: 30, b: 60, t: 30, pad: 5 }, legend: {orientation: 'h', yanchor: 'bottom', y: 1.02, xanchor: 'right', x:1, font: {size: 11}}, autosize: true, paper_bgcolor: '#f9fafb', plot_bgcolor: '#f9fafb', xaxis: { showline: true, linewidth: 1, linecolor: '#666', ticks: 'outside', titlefont: {size: 14, color: '#4b5563'}, tickfont: {size: 12, color: '#6b7280'} }, yaxis: { titlefont: {size: 14, color: '#4b5563'}, tickfont: {size: 12, color: '#6b7280'} }};
+        function drawPlot1_SupplyLines(years, s1Data, s2Data) { const traceS1 = { x: years, y: s1Data, mode: 'lines+markers', name: 'Oferta S1', line: {color: '#3b82f6'}, marker: {size: 5} }; const traceS2 = { x: years, y: s2Data, mode: 'lines+markers', name: 'Oferta S2', line: {color: '#16a34a'}, marker: {size: 5} }; const layout = { ...commonPlotLayout, xaxis: { ...commonPlotLayout.xaxis, title: { text: null } }, yaxis: { ...commonPlotLayout.yaxis, title: 'Oferta Total Anual (cmd)' } }; Plotly.newPlot(plot1Div, [traceS1, traceS2], layout, {responsive: true}); }
+        function drawPlot2_SupplyBoxplots(monthlyDataS1, monthlyDataS2) { const monthNames = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic']; const traceS1 = { y: [].concat(...monthlyDataS1), x: monthNames.flatMap(m => Array(monthlyDataS1[monthNames.indexOf(m)].length).fill(m)), type: 'box', name: 'Oferta S1', marker: { color: '#3b82f6' }, boxpoints: 'Outliers'}; const traceS2 = { y: [].concat(...monthlyDataS2), x: monthNames.flatMap(m => Array(monthlyDataS2[monthNames.indexOf(m)].length).fill(m)), type: 'box', name: 'Oferta S2', marker: { color: '#16a34a' }, boxpoints: 'Outliers'}; const layout = { ...commonPlotLayout, yaxis: { ...commonPlotLayout.yaxis, title: 'Oferta Hídrica Mensual (cmd)', zeroline: false }, xaxis: { ...commonPlotLayout.xaxis, title: { text: null }, type: 'category' }, boxmode: 'group', showlegend: true }; Plotly.newPlot(plot2Div, [traceS1, traceS2], layout, {responsive: true}); }
+        function drawPlot3_DemandLines(years, s1Data, s2Data) { const traceS1 = { x: years, y: s1Data, mode: 'lines+markers', name: 'Demanda S1', line: {color: '#ef4444'}, marker: {size: 5} }; const traceS2 = { x: years, y: s2Data, mode: 'lines+markers', name: 'Demanda S2', line: {color: '#f97316'}, marker: {size: 5} }; const layout = { ...commonPlotLayout, xaxis: { ...commonPlotLayout.xaxis, title: { text: null } }, yaxis: { ...commonPlotLayout.yaxis, title: 'Demanda Total Anual (cmd)' } }; Plotly.newPlot(plot3Div, [traceS1, traceS2], layout, {responsive: true}); }
+        function drawPlot4_DemandBoxplots(monthlyDataS1, monthlyDataS2) { const monthNames = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic']; const traceS1 = { y: [].concat(...monthlyDataS1), x: monthNames.flatMap(m => Array(monthlyDataS1[monthNames.indexOf(m)].length).fill(m)), type: 'box', name: 'Demanda S1', marker: { color: '#ef4444' }, boxpoints: 'Outliers'}; const traceS2 = { y: [].concat(...monthlyDataS2), x: monthNames.flatMap(m => Array(monthlyDataS2[monthNames.indexOf(m)].length).fill(m)), type: 'box', name: 'Demanda S2', marker: { color: '#f97316' }, boxpoints: 'Outliers'}; const layout = { ...commonPlotLayout, yaxis: { ...commonPlotLayout.yaxis, title: 'Demanda Hídrica Mensual (cmd)', zeroline: false }, xaxis: { ...commonPlotLayout.xaxis, title: { text: null }, type: 'category' }, boxmode: 'group', showlegend: true }; Plotly.newPlot(plot4Div, [traceS1, traceS2], layout, {responsive: true}); }
+        function drawPlot5_AnnualComposition(compS1, compS2) { const componentNames = { ambiental: 'Ambiental', rural: 'Rural', urbano: 'Urbano', irrigacion: 'Irrigación', animal: 'Animal' }; const colors = { ambiental: '#2dd4bf', rural: '#fbbf24', urbano: '#f87171', irrigacion: '#60a5fa', animal: '#c084fc' }; const traces = []; for (const component in compS1) { traces.push({ x: ['Escenario 1', 'Escenario 2'], y: [compS1[component] || 0, compS2[component] || 0], name: componentNames[component], type: 'bar', marker: { color: colors[component] } }); } const layout = { ...commonPlotLayout, barmode: 'stack', yaxis: { ...commonPlotLayout.yaxis, title: 'Aporte a la Demanda (%)', ticksuffix: '%' }, xaxis: { ...commonPlotLayout.xaxis, title: { text: null } } }; Plotly.newPlot(plot5Div, traces, layout, {responsive: true}); }
+        function drawPlot6_MonthlyComposition(compS1, compS2) { const monthNames = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic']; const componentNames = { ambiental: 'Ambiental', rural: 'Rural', urbano: 'Urbano', irrigacion: 'Irrigación', animal: 'Animal' }; const colors = { ambiental: '#2dd4bf', rural: '#fbbf24', urbano: '#f87171', irrigacion: '#60a5fa', animal: '#c084fc' }; const traces = []; const final_x_axis = []; const y_axes = {}; for(const component in componentNames){ y_axes[component] = []; } for(let i=0; i<12; i++){ final_x_axis.push(`S1 ${monthNames[i]}`); for(const component in componentNames){ y_axes[component].push(compS1[i][component] || 0); } final_x_axis.push(`S2 ${monthNames[i]}`); for(const component in componentNames){ y_axes[component].push(compS2[i][component] || 0); } } for(const component in componentNames) { traces.push({ x: final_x_axis, y: y_axes[component], name: componentNames[component], type: 'bar', marker: { color: colors[component] } }); } const layout = { ...commonPlotLayout, barmode: 'stack', yaxis: { ...commonPlotLayout.yaxis, title: 'Aporte a la Demanda (%)', ticksuffix: '%' }, xaxis: { ...commonPlotLayout.xaxis, title: { text: null }, tickangle: -45 } }; Plotly.newPlot(plot6Div, traces, layout, {responsive: true}); }
+        function clearAllPlots(message) { const layout = { xaxis: {visible: false}, yaxis: {visible: false}, annotations: [{text: message, xref: 'paper', yref: 'paper', showarrow: false, font: {size: 16, color: '#6b7280'}, align: 'center'}], autosize: true, paper_bgcolor: '#f9fafb', plot_bgcolor: '#f9fafb' }; Plotly.newPlot(plot1Div, [], layout, {responsive: true}); Plotly.newPlot(plot2Div, [], layout, {responsive: true}); Plotly.newPlot(plot3Div, [], layout, {responsive: true}); Plotly.newPlot(plot4Div, [], layout, {responsive: true}); Plotly.newPlot(plot5Div, [], layout, {responsive: true}); Plotly.newPlot(plot6Div, [], layout, {responsive: true}); }
         
-        function drawPlot6_MonthlyComposition(compS1, compS2) {
-            const monthNames = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
-            const componentNames = { ambiental: 'Ambiental', rural: 'Rural', urbano: 'Urbano', irrigacion: 'Irrigación', animal: 'Animal' };
-            const colors = { ambiental: '#2dd4bf', rural: '#fbbf24', urbano: '#f87171', irrigacion: '#60a5fa', animal: '#c084fc' };
-            const traces = [];
-            
-            const final_x_axis = [];
-            const y_axes = {};
-            for(const component in componentNames){
-                y_axes[component] = [];
+        // --- CORRECTED CODE FOR NAVIGATION ---
+        document.getElementById('goToCuencasBtn').addEventListener('click', function(event) {
+            // Check if file names and parameters have been generated for both scenarios
+            if (scenario1FileName && scenario1Params && scenario2FileName && scenario2Params) {
+                // Clear any large data from sessionStorage just in case
+                sessionStorage.removeItem('scenario1Data');
+                sessionStorage.removeItem('scenario2Data');
+                
+                // Store ONLY the file names and parameters. This is lightweight.
+                sessionStorage.setItem('scenario1FileName', scenario1FileName);
+                sessionStorage.setItem('scenario1Params', JSON.stringify(scenario1Params));
+
+                sessionStorage.setItem('scenario2FileName', scenario2FileName);
+                sessionStorage.setItem('scenario2Params', JSON.stringify(scenario2Params));
+                // Allow the default link behavior to proceed
+            } else {
+                // If data hasn't been generated and loaded successfully, prevent navigation
+                event.preventDefault();
+                showMessage('Por favor, primero genere una comparación válida donde ambos escenarios se carguen correctamente.', 'warning');
             }
-
-            for(let i=0; i<12; i++){
-                // Add S1 data for month i
-                final_x_axis.push(`S1 ${monthNames[i]}`);
-                for(const component in componentNames){
-                    y_axes[component].push(compS1[i][component] || 0);
-                }
-
-                // Add S2 data for month i
-                final_x_axis.push(`S2 ${monthNames[i]}`);
-                for(const component in componentNames){
-                    y_axes[component].push(compS2[i][component] || 0);
-                }
-            }
-
-            for(const component in componentNames) {
-                traces.push({
-                    x: final_x_axis,
-                    y: y_axes[component],
-                    name: componentNames[component],
-                    type: 'bar',
-                    marker: { color: colors[component] }
-                });
-            }
-
-             const layout = { ...commonPlotLayout,
-                barmode: 'stack',
-                yaxis: { ...commonPlotLayout.yaxis, title: 'Aporte a la Demanda (%)', ticksuffix: '%' },
-                xaxis: { ...commonPlotLayout.xaxis, title: { text: null }, tickangle: -45 }
-            };
-            Plotly.newPlot(plot6Div, traces, layout, {responsive: true});
-        }
-
-        
-        function clearAllPlots(message) {
-            const layout = {
-                xaxis: {visible: false}, yaxis: {visible: false}, 
-                annotations: [{text: message, xref: 'paper', yref: 'paper', showarrow: false, font: {size: 16, color: '#6b7280'}, align: 'center'}],
-                autosize: true, paper_bgcolor: '#f9fafb', plot_bgcolor: '#f9fafb'
-            };
-            Plotly.newPlot(plot1Div, [], layout, {responsive: true});
-            Plotly.newPlot(plot2Div, [], layout, {responsive: true});
-            Plotly.newPlot(plot3Div, [], layout, {responsive: true});
-            Plotly.newPlot(plot4Div, [], layout, {responsive: true});
-            Plotly.newPlot(plot5Div, [], layout, {responsive: true});
-            Plotly.newPlot(plot6Div, [], layout, {responsive: true});
-        }
+        });
     </script>
 </body>
 </html>

@@ -3,63 +3,81 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Análisis de Estrés Hídrico por Cuenca - OWF</title>
+    <title>Análisis Comparativo de Estrés Hídrico por Cuenca - OWF</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+    <!-- Se añade PapaParse para leer los archivos CSV -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         body { 
             font-family: 'Inter', sans-serif; 
             background-color: #f0f4f8;
         }
         .plot-container { 
-            min-height: 500px; /* Taller for single large plot */
+            min-height: 500px;
             background-color: #ffffff;
             border-radius: 0.5rem;
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-            padding: 1rem; /* p-4 */
+            padding: 1rem;
         }
         .main-container {
             background-color: #ffffff;
             box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
             border-radius: 0.75rem;
         }
-         .info-box {
-            background-color: #e0f2fe; /* sky-100 */
-            border: 1px solid #bae6fd; /* sky-200 */
-            color: #075985; /* sky-800 */
+        .info-box {
+            background-color: #e0f2fe;
+            border: 1px solid #bae6fd;
+            color: #075985;
         }
     </style>
 </head>
 <body class="p-4 md:p-8">
-    <div class="container mx-auto max-w-6xl main-container p-6 md:p-10">
+    <div class="container mx-auto max-w-screen-xl main-container p-6 md:p-10">
         <header class="mb-8 pb-6 border-b border-slate-200">
-            <h1 class="text-3xl md:text-4xl font-bold text-center text-blue-700">Análisis de Estrés Hídrico por Cuenca (Año 2070)</h1>
-            <div id="scenarioInfo" class="mt-3 text-center text-sm text-slate-600 info-box p-3 rounded-md">
-                Cargando información del escenario...
-            </div>
-            <p class="text-center text-sm text-slate-500 mt-4">
-                <a href="visualizer.html" class="text-blue-600 hover:text-blue-800 hover:underline transition-colors duration-200">&larr; Volver al Visualizador Principal</a>
-            </p>
+            <h1 class="text-3xl md:text-4xl font-bold text-center text-blue-700">Análisis Comparativo de Estrés Hídrico por Cuenca (Año 2070)</h1>
+             <p class="text-center text-sm text-slate-500 mt-4">
+                 <a href="visualizer.html" class="text-blue-600 hover:text-blue-800 hover:underline transition-colors duration-200">&larr; Volver al Visualizador Principal</a>
+             </p>
         </header>
 
-        <div id="stressPlotContainer" class="plot-container">
+        <!-- Mensaje de estado global -->
+        <div id="statusMessage" class="my-6 p-4 rounded-lg text-center text-sm" style="display: none;"></div>
+
+        <div id="plotsArea" class="grid grid-cols-1 lg:grid-cols-2 gap-8" style="display: none;">
+            <!-- Contenedor para el Gráfico del Escenario 1 -->
+            <div>
+                <h2 class="text-xl font-semibold text-center text-slate-800 mb-3">Escenario 1</h2>
+                <div id="scenarioInfo1" class="text-center text-xs text-slate-600 info-box p-3 rounded-md mb-4"></div>
+                <div id="stressPlotContainer1" class="plot-container"></div>
             </div>
+            <!-- Contenedor para el Gráfico del Escenario 2 -->
+            <div>
+                <h2 class="text-xl font-semibold text-center text-slate-800 mb-3">Escenario 2</h2>
+                <div id="scenarioInfo2" class="text-center text-xs text-slate-600 info-box p-3 rounded-md mb-4"></div>
+                <div id="stressPlotContainer2" class="plot-container"></div>
+            </div>
+        </div>
         
         <div id="noDataMessage" class="my-10 p-6 bg-yellow-100 border border-yellow-300 text-yellow-700 rounded-lg text-center" style="display: none;">
-            <p class="font-semibold">No se encontraron datos del escenario.</p>
-            <p class="mt-2">Por favor, primero genere un escenario en el <a href="visualizer.html" class="font-bold underline hover:text-yellow-800">Visualizador Principal</a>.</p>
+            <p class="font-semibold">No se encontraron datos de los escenarios.</p>
+            <p class="mt-2">Por favor, primero genere una comparación en el <a href="visualizer.html" class="font-bold underline hover:text-yellow-800">Visualizador Principal</a>.</p>
         </div>
 
         <footer class="mt-12 pt-6 border-t border-slate-200 text-center text-sm text-slate-500">
-            <p>El Índice de Estrés Hídrico se calcula como: (Entregas por Cuenca + Flujo Ecológico por Cuenca) / Oferta de Agua por Cuenca.</p>
-            <p>Valores más altos indican mayor estrés.</p>
+            <p>El Índice de Estrés Hídrico se calcula como: (Σ Demandas Sectoriales + Flujo Ecológico) / Oferta de Agua. Valores más altos indican mayor estrés.</p>
+            <p>Rojo (&gt;1.0): Estrés Crítico | Naranja (0.6-1.0): Estrés Alto | Verde (&lt;0.6): Sostenible</p>
         </footer>
     </div>
 
     <script>
-        const stressPlotDiv = document.getElementById('stressPlotContainer');
-        const scenarioInfoDiv = document.getElementById('scenarioInfo');
+        const plotsArea = document.getElementById('plotsArea');
         const noDataMessageDiv = document.getElementById('noDataMessage');
+        const statusMessageDiv = document.getElementById('statusMessage');
+
+        const manifestFileId = '1FwBwdgVNv01esuocWWOEXlo6uh56Q8Ai'; 
+        let fileManifest = null;
 
         const cuencaBaseNames = [
             "Casanare", "CravoSur", "Cumaral", "Cusiana", "Dir_btw_ca_or", "Dir_btw_cu_ca", 
@@ -68,110 +86,233 @@
             "Lengupa", "Manacacias", "Melua", "Metica", "Negro", "Pauto", "Tua", "Upia", "Yucao"
         ];
 
-        window.onload = () => {
-            const scenarioDataString = sessionStorage.getItem('currentScenarioData');
-            const scenarioFileName = sessionStorage.getItem('currentScenarioFileName');
-            const scenarioParamsString = sessionStorage.getItem('currentScenarioParameters');
+        // --- SCRIPT DE CARGA PRINCIPAL ---
+        window.onload = async () => {
+            const paramsS1 = getScenarioParams('scenario1Params');
+            const fileNameS1 = sessionStorage.getItem('scenario1FileName');
+            const paramsS2 = getScenarioParams('scenario2Params');
+            const fileNameS2 = sessionStorage.getItem('scenario2FileName');
 
-            if (scenarioDataString && scenarioFileName && scenarioParamsString) {
-                try {
-                    const csvData = JSON.parse(scenarioDataString);
-                    const params = JSON.parse(scenarioParamsString);
-                    scenarioInfoDiv.innerHTML = `Análisis para el escenario: <strong>${scenarioFileName}</strong><br>
-                        Política: ${params.policy}, ΔTemp: ${params.tempChange}°C, ΔPrecip: ${params.precipChange}%, Pob: ${params.popYear}, Cult: ${params.cropYear}, Gan: ${params.livestockYear}`;
-                    
-                    processAndDrawStressPlot(csvData);
-                    noDataMessageDiv.style.display = 'none';
-                    stressPlotDiv.style.display = 'block';
+            if (!fileNameS1 || !paramsS1 || !fileNameS2 || !paramsS2) {
+                showNoDataMessage("No se encontraron parámetros de escenario. Por favor, genere una comparación en la página principal primero.");
+                return;
+            }
 
-                } catch (e) {
-                    console.error("Error al parsear datos de sessionStorage:", e);
-                    showNoDataMessage("Error al cargar datos del escenario.");
+            try {
+                // 1. Cargar el manifiesto de archivos
+                showStatusMessage('Cargando índice de archivos...', 'info');
+                await loadManifest();
+                showStatusMessage('Índice cargado. Descargando datos de escenarios...', 'info');
+
+                // 2. Cargar los datos de los CSV de forma concurrente
+                const [dataS1, dataS2] = await Promise.all([
+                    getCsvDataFromDrive(fileNameS1).catch(e => {
+                        console.error("Error cargando Escenario 1:", e);
+                        showPlotMessage('stressPlotContainer1', `Error al cargar ${fileNameS1}: ${e.message}`);
+                        return null; // Devuelve null si falla para que Promise.all no se detenga
+                    }),
+                    getCsvDataFromDrive(fileNameS2).catch(e => {
+                        console.error("Error cargando Escenario 2:", e);
+                        showPlotMessage('stressPlotContainer2', `Error al cargar ${fileNameS2}: ${e.message}`);
+                        return null; // Devuelve null si falla
+                    })
+                ]);
+                
+                showStatusMessage('Datos cargados. Procesando y dibujando gráficos...', 'success');
+                plotsArea.style.display = 'grid';
+                noDataMessageDiv.style.display = 'none';
+
+                // 3. Procesar y dibujar el Escenario 1 si los datos se cargaron
+                if (dataS1) {
+                    displayScenarioInfo('scenarioInfo1', fileNameS1, paramsS1);
+                    const stressValuesS1 = calculateStressValues(dataS1);
+                    drawStressBarChart('stressPlotContainer1', cuencaBaseNames, stressValuesS1, 'Estrés Hídrico - Escenario 1');
+                } else {
+                    displayScenarioInfo('scenarioInfo1', fileNameS1, paramsS1); // Muestra info incluso si falla
+                    showPlotMessage('stressPlotContainer1', 'No se pudieron cargar los datos para el Escenario 1.');
                 }
-            } else {
-                showNoDataMessage("No se encontraron datos del escenario. Genere uno en la página principal.");
+
+                // 4. Procesar y dibujar el Escenario 2 si los datos se cargaron
+                if (dataS2) {
+                    displayScenarioInfo('scenarioInfo2', fileNameS2, paramsS2);
+                    const stressValuesS2 = calculateStressValues(dataS2);
+                    drawStressBarChart('stressPlotContainer2', cuencaBaseNames, stressValuesS2, 'Estrés Hídrico - Escenario 2');
+                } else {
+                    displayScenarioInfo('scenarioInfo2', fileNameS2, paramsS2); // Muestra info incluso si falla
+                    showPlotMessage('stressPlotContainer2', 'No se pudieron cargar los datos para el Escenario 2.');
+                }
+                
+                // Ocultar mensaje de estado después de un momento
+                setTimeout(() => statusMessageDiv.style.display = 'none', 3000);
+
+            } catch (error) {
+                console.error("Error en el proceso de carga:", error);
+                showNoDataMessage(`Error fatal: ${error.message}. No se pueden mostrar los gráficos.`);
             }
         };
+        
+        function getScenarioParams(paramsKey) {
+            const paramsString = sessionStorage.getItem(paramsKey);
+            if (!paramsString) return null;
+            try {
+                return JSON.parse(paramsString);
+            } catch (e) {
+                console.error(`Error al parsear parámetros de sessionStorage para ${paramsKey}:`, e);
+                return null;
+            }
+        }
+
+        async function loadManifest() {
+             if (fileManifest) return; // No recargar si ya existe
+             const googleDriveUrl = `https://drive.google.com/uc?export=download&id=${manifestFileId}`;
+             const proxyUrl = 'https://corsproxy.io/?';
+             const manifestUrl = proxyUrl + encodeURIComponent(googleDriveUrl);
+             const response = await fetch(manifestUrl);
+             if (!response.ok) throw new Error(`Error de red al buscar el manifiesto: ${response.statusText}`);
+             fileManifest = await response.json();
+        }
+
+        async function getCsvDataFromDrive(fileName) {
+            if (!fileManifest) throw new Error("El manifiesto de archivos no está cargado.");
+            const fileId = fileManifest[fileName];
+            if (!fileId) {
+                throw new Error(`Archivo no encontrado en el manifiesto: ${fileName}`);
+            }
+            const googleDriveUrl = `https://drive.google.com/uc?export=download&id=${fileId}`;
+            const proxyUrl = 'https://corsproxy.io/?';
+            const fileUrl = proxyUrl + encodeURIComponent(googleDriveUrl);
+            const response = await fetch(fileUrl);
+            if (!response.ok) {
+                throw new Error(`No se pudo descargar el archivo ${fileName}. Estado: ${response.status}`);
+            }
+            const csvText = await response.text();
+            return new Promise((resolve, reject) => {
+                Papa.parse(csvText, {
+                    header: true, dynamicTyping: true, skipEmptyLines: true,
+                    complete: (results) => {
+                        if (results.errors.length) {
+                            reject(new Error(`Error al parsear CSV ${fileName}: ${results.errors[0].message}`));
+                        } else if (!results.data.length) {
+                            reject(new Error(`El archivo CSV '${fileName}' está vacío.`));
+                        } else {
+                            resolve(results.data);
+                        }
+                    },
+                    error: (err) => reject(err)
+                });
+            });
+        }
+        
+        // --- FUNCIONES DE VISUALIZACIÓN (sin cambios) ---
+
+        function displayScenarioInfo(divId, fileName, params) {
+            const div = document.getElementById(divId);
+            if (!div || !params || !fileName) return;
+            // Mostrar replica si está disponible en los parámetros
+            const replicaInfo = params.replica ? `R${params.replica}, ` : '';
+            div.innerHTML = `<strong>Archivo:</strong> ${fileName}<br>
+                             <strong>Parámetros:</strong> ${replicaInfo}Pol: ${params.policy}, ΔT: ${params.tempChange}°C, ΔP: ${params.precipChange}%, Pob: ${params.popYear}, Cult: ${params.cropYear}, Gan: ${params.livestockYear}`;
+        }
+
+        function showStatusMessage(text, type = 'info') {
+            statusMessageDiv.textContent = text;
+            statusMessageDiv.style.display = 'block';
+             let baseClasses = "my-6 p-4 rounded-lg text-center text-sm ";
+            if (type === 'error') {
+                statusMessageDiv.className = baseClasses + 'bg-red-100 text-red-700 border border-red-300';
+            } else if (type === 'success') {
+                statusMessageDiv.className = baseClasses + 'bg-green-100 text-green-700 border border-green-300';
+            } else { // info
+                statusMessageDiv.className = baseClasses + 'bg-blue-100 text-blue-700 border border-blue-300';
+            }
+        }
 
         function showNoDataMessage(message) {
             noDataMessageDiv.querySelector('p.font-semibold').textContent = message;
             noDataMessageDiv.style.display = 'block';
-            stressPlotDiv.style.display = 'none';
-            scenarioInfoDiv.textContent = "No hay escenario activo."
+            plotsArea.style.display = 'none';
         }
 
-        function processAndDrawStressPlot(csvData) {
+        function showPlotMessage(divId, message) {
+            const div = document.getElementById(divId);
+            if(div) {
+                 const layout = {
+                    xaxis: {visible: false}, yaxis: {visible: false}, 
+                    annotations: [{text: message, xref: 'paper', yref: 'paper', showarrow: false, font: {size: 16, color: '#6b7280'}, align: 'center'}],
+                    autosize: true, paper_bgcolor: '#ffffff', plot_bgcolor: '#ffffff'
+                };
+                Plotly.newPlot(div, [], layout, {responsive: true});
+            }
+        }
+
+        function calculateStressValues(csvData) {
+            // Filtra los datos para obtener solo las filas correspondientes al año 2070
             const data2070 = csvData.filter(row => {
-                if (typeof row.Date === 'string') {
-                    return new Date(row.Date).getFullYear() === 2070;
-                } else if (row.Date instanceof Date) {
-                    return row.Date.getFullYear() === 2070;
+                if (!row || typeof row.Date !== 'string') return false;
+                try {
+                    return new Date(row.Date + 'T00:00:00Z').getUTCFullYear() === 2070;
+                } catch(e) {
+                    return false;
                 }
-                return false;
             });
 
             if (data2070.length === 0) {
-                showNoDataMessage("No se encontraron datos para el año 2070 en el escenario actual.");
-                return;
+                console.warn("No se encontraron datos para el año 2070 en el escenario actual.");
+                return cuencaBaseNames.map(() => 0);
             }
 
-            const averageStressByCuenca = cuencaBaseNames.map(baseName => {
-                const deliveriesCol = `Deliveries_${baseName}_cmd`;
+            // Calcula el estrés promedio para cada cuenca
+            return cuencaBaseNames.map(baseName => {
                 const denvCol = `Denv_${baseName}_cmd`;
                 const ofertaCol = `To_downstream_from_${baseName}_cmd`;
-                
-                let monthlyStresses = [];
-                for (let i = 0; i < 12; i++) { // Asumimos 12 meses de datos para 2070
-                    const monthData = data2070[i]; // Podría ser más robusto buscando por mes específico
-                    if (!monthData) continue;
+                const dfwrCol = `Dfwr_${baseName}_cmd`;
+                const dfwuCol = `Dfwu_${baseName}_cmd`;
+                const dirrCol = `Dirr_${baseName}_cmd`;
+                const dlivCol = `Dliv_${baseName}_cmd`;
 
-                    const deliveries = parseFloat(monthData[deliveriesCol]) || 0;
+                let monthlyStresses = [];
+                data2070.forEach(monthData => {
+                    const deliveries = (parseFloat(monthData[dfwrCol]) || 0) +
+                                       (parseFloat(monthData[dfwuCol]) || 0) +
+                                       (parseFloat(monthData[dirrCol]) || 0) +
+                                       (parseFloat(monthData[dlivCol]) || 0);
+
                     const denv = parseFloat(monthData[denvCol]) || 0;
                     const oferta = parseFloat(monthData[ofertaCol]) || 0;
-
-                    const demandaTotalEcologica = deliveries + denv;
+                    const demandaTotal = deliveries + denv;
+                    
                     let stressIndex = 0;
-
-                    if (oferta > 0) {
-                        stressIndex = demandaTotalEcologica / oferta;
-                    } else {
-                        if (demandaTotalEcologica > 0) {
-                            stressIndex = 10; // Cap at a high value for "infinite" stress
-                        } else {
-                            stressIndex = 0; // 0/0 case
-                        }
+                    if (oferta > 0.001) {
+                        stressIndex = demandaTotal / oferta;
+                    } else if (demandaTotal > 0) {
+                        stressIndex = 10; // Valor alto para estrés "infinito"
                     }
                     monthlyStresses.push(stressIndex);
-                }
+                });
                 
                 if (monthlyStresses.length > 0) {
                     const sum = monthlyStresses.reduce((acc, val) => acc + val, 0);
-                    return sum / monthlyStresses.length;
+                    return sum / monthlyStresses.length; // Promedio anual
                 }
-                return 0; // Default if no monthly data found for the cuenca in 2070
+                return 0;
             });
-
-            drawStressBarChart(cuencaBaseNames, averageStressByCuenca);
         }
 
-        function drawStressBarChart(cuencas, stressValues) {
+        function drawStressBarChart(divId, cuencas, stressValues, title) {
             const trace = {
                 x: cuencas,
                 y: stressValues,
                 type: 'bar',
                 marker: {
-                    color: stressValues.map(val => val > 1 ? '#ef4444' : (val > 0.6 ? '#f59e0b' : '#22c55e')), // Red, Amber, Green
-                     line: {
-                        color: '#6b7280', // gray-500
-                        width: 0.5
-                    }
+                    color: stressValues.map(val => val > 1 ? '#ef4444' : (val > 0.6 ? '#f59e0b' : '#22c55e')),
+                    line: { color: '#6b7280', width: 0.5 }
                 },
                 hovertext: stressValues.map(val => `Estrés: ${val.toFixed(3)}`),
                 hoverinfo: 'x+text'
             };
 
             const layout = {
-                title: { text: 'Índice de Estrés Hídrico Promedio Mensual por Cuenca (Año 2070)', font: {size: 18, color: '#374151'}, y:0.95 },
+                title: { text: title, font: {size: 16, color: '#374151'}, y:0.95 },
                 xaxis: { 
                     title: 'Cuenca', 
                     tickangle: -45, 
@@ -180,19 +321,19 @@
                     tickfont: {size: 10, color: '#6b7280'} 
                 },
                 yaxis: { 
-                    title: 'Índice de Estrés Hídrico Promedio (Adimensional)',
-                    titlefont: {size: 14, color: '#4b5563'}, 
-                    tickfont: {size: 12, color: '#6b7280'}
+                    title: 'Índice de Estrés Hídrico Promedio',
+                    titlefont: {size: 12, color: '#4b5563'}, 
+                    tickfont: {size: 12, color: '#6b7280'},
+                    range: [0, Math.max(1.2, ...stressValues.filter(v => isFinite(v))) * 1.1]
                 },
-                margin: { l: 70, r: 30, b: 150, t: 70, pad: 5 }, // Increased bottom margin for tilted labels
+                margin: { l: 70, r: 30, b: 150, t: 70, pad: 5 },
                 autosize: true, 
-                paper_bgcolor: '#f9fafb', 
+                paper_bgcolor: '#ffffff', 
                 plot_bgcolor: '#f9fafb'
             };
 
-            Plotly.newPlot(stressPlotDiv, [trace], layout, {responsive: true});
+            Plotly.newPlot(divId, [trace], layout, {responsive: true});
         }
-
     </script>
 </body>
 </html>
