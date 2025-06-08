@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Análisis de Estrés Hídrico por Cuenca - OWF</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #f0f4f8;
+        }
+        .plot-container { 
+            min-height: 500px; /* Taller for single large plot */
+            background-color: #ffffff;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            padding: 1rem; /* p-4 */
+        }
+        .main-container {
+            background-color: #ffffff;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            border-radius: 0.75rem;
+        }
+         .info-box {
+            background-color: #e0f2fe; /* sky-100 */
+            border: 1px solid #bae6fd; /* sky-200 */
+            color: #075985; /* sky-800 */
+        }
+    </style>
+</head>
+<body class="p-4 md:p-8">
+    <div class="container mx-auto max-w-6xl main-container p-6 md:p-10">
+        <header class="mb-8 pb-6 border-b border-slate-200">
+            <h1 class="text-3xl md:text-4xl font-bold text-center text-blue-700">Análisis de Estrés Hídrico por Cuenca (Año 2070)</h1>
+            <div id="scenarioInfo" class="mt-3 text-center text-sm text-slate-600 info-box p-3 rounded-md">
+                Cargando información del escenario...
+            </div>
+            <p class="text-center text-sm text-slate-500 mt-4">
+                <a href="visualizer.html" class="text-blue-600 hover:text-blue-800 hover:underline transition-colors duration-200">&larr; Volver al Visualizador Principal</a>
+            </p>
+        </header>
+
+        <div id="stressPlotContainer" class="plot-container">
+            </div>
+        
+        <div id="noDataMessage" class="my-10 p-6 bg-yellow-100 border border-yellow-300 text-yellow-700 rounded-lg text-center" style="display: none;">
+            <p class="font-semibold">No se encontraron datos del escenario.</p>
+            <p class="mt-2">Por favor, primero genere un escenario en el <a href="visualizer.html" class="font-bold underline hover:text-yellow-800">Visualizador Principal</a>.</p>
+        </div>
+
+        <footer class="mt-12 pt-6 border-t border-slate-200 text-center text-sm text-slate-500">
+            <p>El Índice de Estrés Hídrico se calcula como: (Entregas por Cuenca + Flujo Ecológico por Cuenca) / Oferta de Agua por Cuenca.</p>
+            <p>Valores más altos indican mayor estrés.</p>
+        </footer>
+    </div>
+
+    <script>
+        const stressPlotDiv = document.getElementById('stressPlotContainer');
+        const scenarioInfoDiv = document.getElementById('scenarioInfo');
+        const noDataMessageDiv = document.getElementById('noDataMessage');
+
+        const cuencaBaseNames = [
+            "Casanare", "CravoSur", "Cumaral", "Cusiana", "Dir_btw_ca_or", "Dir_btw_cu_ca", 
+            "Dir_btw_cu_cs", "Dir_btw_gb_yu", "Dir_btw_hu_up", "Dir_btw_p_ca", "Garagoa", 
+            "Guacavia", "Guanapalo", "Guatiquia", "Guavio", "Guayuriba", "Humea", "Lago_de_tota", 
+            "Lengupa", "Manacacias", "Melua", "Metica", "Negro", "Pauto", "Tua", "Upia", "Yucao"
+        ];
+
+        window.onload = () => {
+            const scenarioDataString = sessionStorage.getItem('currentScenarioData');
+            const scenarioFileName = sessionStorage.getItem('currentScenarioFileName');
+            const scenarioParamsString = sessionStorage.getItem('currentScenarioParameters');
+
+            if (scenarioDataString && scenarioFileName && scenarioParamsString) {
+                try {
+                    const csvData = JSON.parse(scenarioDataString);
+                    const params = JSON.parse(scenarioParamsString);
+                    scenarioInfoDiv.innerHTML = `Análisis para el escenario: <strong>${scenarioFileName}</strong><br>
+                        Política: ${params.policy}, ΔTemp: ${params.tempChange}°C, ΔPrecip: ${params.precipChange}%, Pob: ${params.popYear}, Cult: ${params.cropYear}, Gan: ${params.livestockYear}`;
+                    
+                    processAndDrawStressPlot(csvData);
+                    noDataMessageDiv.style.display = 'none';
+                    stressPlotDiv.style.display = 'block';
+
+                } catch (e) {
+                    console.error("Error al parsear datos de sessionStorage:", e);
+                    showNoDataMessage("Error al cargar datos del escenario.");
+                }
+            } else {
+                showNoDataMessage("No se encontraron datos del escenario. Genere uno en la página principal.");
+            }
+        };
+
+        function showNoDataMessage(message) {
+            noDataMessageDiv.querySelector('p.font-semibold').textContent = message;
+            noDataMessageDiv.style.display = 'block';
+            stressPlotDiv.style.display = 'none';
+            scenarioInfoDiv.textContent = "No hay escenario activo."
+        }
+
+        function processAndDrawStressPlot(csvData) {
+            const data2070 = csvData.filter(row => {
+                if (typeof row.Date === 'string') {
+                    return new Date(row.Date).getFullYear() === 2070;
+                } else if (row.Date instanceof Date) {
+                    return row.Date.getFullYear() === 2070;
+                }
+                return false;
+            });
+
+            if (data2070.length === 0) {
+                showNoDataMessage("No se encontraron datos para el año 2070 en el escenario actual.");
+                return;
+            }
+
+            const averageStressByCuenca = cuencaBaseNames.map(baseName => {
+                const deliveriesCol = `Deliveries_${baseName}_cmd`;
+                const denvCol = `Denv_${baseName}_cmd`;
+                const ofertaCol = `To_downstream_from_${baseName}_cmd`;
+                
+                let monthlyStresses = [];
+                for (let i = 0; i < 12; i++) { // Asumimos 12 meses de datos para 2070
+                    const monthData = data2070[i]; // Podría ser más robusto buscando por mes específico
+                    if (!monthData) continue;
+
+                    const deliveries = parseFloat(monthData[deliveriesCol]) || 0;
+                    const denv = parseFloat(monthData[denvCol]) || 0;
+                    const oferta = parseFloat(monthData[ofertaCol]) || 0;
+
+                    const demandaTotalEcologica = deliveries + denv;
+                    let stressIndex = 0;
+
+                    if (oferta > 0) {
+                        stressIndex = demandaTotalEcologica / oferta;
+                    } else {
+                        if (demandaTotalEcologica > 0) {
+                            stressIndex = 10; // Cap at a high value for "infinite" stress
+                        } else {
+                            stressIndex = 0; // 0/0 case
+                        }
+                    }
+                    monthlyStresses.push(stressIndex);
+                }
+                
+                if (monthlyStresses.length > 0) {
+                    const sum = monthlyStresses.reduce((acc, val) => acc + val, 0);
+                    return sum / monthlyStresses.length;
+                }
+                return 0; // Default if no monthly data found for the cuenca in 2070
+            });
+
+            drawStressBarChart(cuencaBaseNames, averageStressByCuenca);
+        }
+
+        function drawStressBarChart(cuencas, stressValues) {
+            const trace = {
+                x: cuencas,
+                y: stressValues,
+                type: 'bar',
+                marker: {
+                    color: stressValues.map(val => val > 1 ? '#ef4444' : (val > 0.6 ? '#f59e0b' : '#22c55e')), // Red, Amber, Green
+                     line: {
+                        color: '#6b7280', // gray-500
+                        width: 0.5
+                    }
+                },
+                hovertext: stressValues.map(val => `Estrés: ${val.toFixed(3)}`),
+                hoverinfo: 'x+text'
+            };
+
+            const layout = {
+                title: { text: 'Índice de Estrés Hídrico Promedio Mensual por Cuenca (Año 2070)', font: {size: 18, color: '#374151'}, y:0.95 },
+                xaxis: { 
+                    title: 'Cuenca', 
+                    tickangle: -45, 
+                    automargin: true,
+                    titlefont: {size: 14, color: '#4b5563'}, 
+                    tickfont: {size: 10, color: '#6b7280'} 
+                },
+                yaxis: { 
+                    title: 'Índice de Estrés Hídrico Promedio (Adimensional)',
+                    titlefont: {size: 14, color: '#4b5563'}, 
+                    tickfont: {size: 12, color: '#6b7280'}
+                },
+                margin: { l: 70, r: 30, b: 150, t: 70, pad: 5 }, // Increased bottom margin for tilted labels
+                autosize: true, 
+                paper_bgcolor: '#f9fafb', 
+                plot_bgcolor: '#f9fafb'
+            };
+
+            Plotly.newPlot(stressPlotDiv, [trace], layout, {responsive: true});
+        }
+
+    </script>
+</body>
+</html>

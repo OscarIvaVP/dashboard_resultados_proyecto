@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proyecto OWF: Agua en la Orinoquía</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .hero-section {
+            /* Asegúrate que 'soporte/imagen/fondo.png' exista o cambia la URL */
+            background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('soporte/imagen/fondo.png');
+            background-size: cover;
+            background-position: center;
+        }
+        .section-card {
+            @apply bg-white p-6 md:p-8 rounded-xl shadow-lg transition-all duration-300 hover:shadow-2xl;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800">
+
+    <header class="bg-blue-600 text-white shadow-md">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <h1 class="text-2xl md:text-3xl font-bold">Proyecto Orinoquia Water Futures (OWF)</h1>
+            </div>
+    </header>
+
+    <section class="hero-section text-white py-20 md:py-32">
+        <div class="container mx-auto px-6 text-center">
+            <h2 class="text-5xl md:text-6xl font-bold mb-4 text-green-400">AGUA EN LA ORINOQUIA:</h2>
+            <p class="text-lg md:text-xl mb-8 text-white">Una producción agropecuaria climáticamente inteligente</p>
+            <a href="analisis/visualizer.html" 
+               class="bg-green-500 hover:bg-green-600 text-white font-semibold py-3 px-8 rounded-lg text-lg shadow-lg transition duration-300 transform hover:scale-105 inline-block">
+               Ir Resultados Interactivos
+            </a>
+        </div>
+    </section>
+
+    <main class="container mx-auto px-6 py-12 md:py-16">
+        <section id="introduccion" class="mb-12 md:mb-16">
+            <div class="section-card">
+                <h3 class="text-2xl md:text-3xl font-semibold text-blue-700 mb-6">Introducción al Proyecto</h3>
+                <p class="text-gray-700 leading-relaxed mb-4">
+                    Incluso en un país aparentemente rico en agua como Colombia, la combinación del cambio climático y el aumento de la demanda de agua puede generar conflictos imprevistos a medida que los problemas hídricos localizados se vuelven más frecuentes. Este proyecto, enmarcado en la iniciativa "<strong>Resilience by Design (RbD)</strong>", busca incorporar la resiliencia en un marco de modelización de sistemas hídricos para la Orinoquía colombiana. Esta región, en un futuro previsible, experimentará los impactos del cambio climático junto con un aumento en la demanda de agua debido al desarrollo económico.
+                </p>
+                <p class="text-gray-700 leading-relaxed mb-4">
+                    El desarrollo agrícola sigue siendo un objetivo crucial para la Orinoquía, así como la exploración de petróleo y gas, actividades que pueden amenazar el equilibrio entre el crecimiento económico y la preservación de los sistemas naturales. El Plan Nacional de Desarrollo de Colombia 2022-2026 establece la planificación hídrica regional como uno de sus ejes, buscando fortalecer la gobernanza del agua y la planificación regional con un enfoque en la adaptabilidad al cambio climático y la gestión de riesgos.
+                </p>
+                 <p class="text-gray-700 leading-relaxed mb-4">
+                    El equipo del proyecto, compuesto por la Universidad de Massachusetts (UMASS), Alianzas para la Sostenibilidad (ALISOS) y la Universidad de los Llanos (UNILLANOS), construyó el modelo de sistema hídrico para la Orinoquía, denominado <strong>Orinoquía Water Futures (OWF)</strong>. Este modelo está diseñado para ser la base de contribuciones continuas al análisis de políticas y al diseño de desarrollo para la región, utilizando el agua como variable maestra para evaluar los impactos ambientales y económicos de posibles escenarios futuros.
+                </p>
+                <p class="text-gray-700 leading-relaxed">
+                    El objetivo es profundizar en la comprensión de estos temas y ayudar a equilibrar los objetivos contrapuestos, apoyando un futuro mejor y más brillante para la Orinoquía. A través de un modelado cuantitativo y un esfuerzo de planificación participativa que involucró a más de 300 actores locales, se busca fomentar una comunidad de interés que pueda servir de base para futuras discusiones y debates.
+                </p>
+                </div>
+        </section>
+
+        <section id="area-estudio" class="mb-12 md:mb-16">
+            <div class="section-card">
+                <h3 class="text-2xl md:text-3xl font-semibold text-blue-700 mb-6">Área de Estudio: La Orinoquía y la Cuenca del Río Meta</h3>
+                <p class="text-gray-700 leading-relaxed mb-4">
+                    La región de la Orinoquía, ubicada en el este de Colombia, es un territorio único compuesto por múltiples ecosistemas, un profundo patrimonio cultural y un futuro prometedor. Comprende los departamentos de Arauca, Casanare, Meta y Vichada, con cuatro subsistemas clave: el Piedemonte (3.7 millones ha), la Altillanura (4.2 millones ha), las Sabanas Inundables (6 millones ha) y la Serranía (7 millones ha), cada uno con características, potencial y limitaciones distintas.
+                </p>
+                <p class="text-gray-700 leading-relaxed mb-4">
+                    En la Orinoquía se encuentran 36 ecosistemas distintos que abarcan bosques densos, bosques de galería, humedales y las dominantes sabanas de pastizales tropicales, consideradas uno de los reservorios de biodiversidad más importantes del Neotrópico. La región alberga a más de 1.5 millones de personas (aproximadamente 1 millón de residentes urbanos y 500,000 rurales), y se espera que la inmigración y el crecimiento poblacional eleven esta cifra a casi 2.25 millones para 2035.
+                </p>
+                <p class="text-gray-700 leading-relaxed mb-4">
+                    Este estudio se centra en la <strong>cuenca del río Meta</strong>, que tiene una longitud de 1,250 km y cubre aproximadamente 100,000 km². El río Meta tiene un caudal promedio de aproximadamente 5,700 m³/s en Puerto Carreño. El clima de la región está dominado por un régimen monzónico con una influencia significativa de los patrones de teleconexión de El Niño-Oscilación del Sur (ENOS). El modelo considera las subcuencas del río Meta definidas por entidades oficiales como unidades de análisis hidrológico, incluyendo las cinco subzonas de la cuenca del Casanare. El estudio contempló 27 cuencas como unidades de estudio, que contienen dos zonas hidrográficas fundamentales de la Orinoquia (Casanare y Meta), tal como se observa en la siguiente figura.
+                </p>
+                <div class="my-6 text-center">
+                    <img src="soporte/imagen/area.png" 
+                         alt="Mapa del Área de Estudio: Cuenca del Río Meta en la Orinoquía" 
+                         class="rounded-lg shadow-md mx-auto max-w-full h-auto border border-gray-200"
+                         onerror="this.onerror=null; this.src='https://placehold.co/800x400/cccccc/FFFFFF?text=Error+al+cargar+soporte/imagen/area.png';">
+                    <p class="text-sm text-gray-500 mt-2">Área de estudio del proyecto AGUA EN LA ORINOQUIA y sus unidades de estudio.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="modelos" class="mb-12 md:mb-16">
+            <div class="section-card">
+                <h3 class="text-2xl md:text-3xl font-semibold text-blue-700 mb-6">Modelos Utilizados: Orinoquía Water Futures (OWF)</h3>
+                 <p class="text-gray-700 leading-relaxed mb-4">
+                    El enfoque metodológico central es <strong>Resilience by Design (RbD)</strong>, desarrollado en la Universidad de Massachusetts. RbD es un proceso participativo de planificación, toma de decisiones y evaluación de inversiones, centrado en una plataforma de análisis de sistemas y modelado de apoyo a la decisión. Este enfoque integra modelado hidrológico, económico y de sistemas, alineado con objetivos y restricciones locales identificados a través de la participación de actores clave.
+                </p>
+                <p class="text-gray-700 leading-relaxed mb-4">
+                    El <strong>Orinoquía Water Futures (OWF)</strong> es una plataforma integrada de modelización de sistemas hídricos que incorpora varios modelos individuales para simular proyecciones sobre el estado futuro del sistema hídrico en la cuenca del río Meta. El modelo OWF proyecta cuánta agua ingresa al sistema a través de los ríos tributarios, cómo se mueve a través del sistema y cuánta es extraída por los usuarios. Los componentes principales del modelo OWF son:
+                </p>
+                <ul class="list-disc list-inside text-gray-700 leading-relaxed space-y-2 mb-4">
+                    <li><strong>Generador Climático (Weather Generator):</strong> Utiliza un Modelo Oculto de Markov (HMM) para crear series temporales de temperatura y precipitación consistentes con posibles cambios climáticos futuros y la variabilidad histórica. Esto permite realizar pruebas de estrés climático.</li>
+                    <li><strong>Modelo Hidrológico:</strong> Emplea el modelo GR2M (Genie Rural 2 Mensuel), un modelo de balance hídrico mensual, para simular el caudal resultante a partir de las entradas de temperatura y precipitación. Este modelo representa los flujos de agua a través de almacenamientos de producción y tránsito.</li>
+                    <li><strong>Modelos de Demanda de Agua:</strong> Contabiliza la demanda de agua dulce para comunidades urbanas y rurales (Dfw), la demanda de agua para ganadería (bovinos, cerdos y pollos - Dliv), la demanda de agua para agricultura (arroz y palma de aceite principalmente - Dirr), y establece un requisito de caudal mínimo para necesidades ambientales (Denv).</li>
+                    <li><strong>Modelo de Infraestructura del Sistema Hídrico (OWF Infrastructure Model):</strong> Codificado en Python utilizando la librería Pywr, este modelo simula cómo el agua viaja a través de los ríos principales y tributarios, las operaciones de embalses (como Guavio y La Esmeralda), las extracciones para uso de agua y los flujos de retorno, rastreando el agua y su uso en toda la cuenca. Utiliza un enfoque de programación lineal para minimizar costos (o priorizar asignaciones) sujeto a balances hídricos y capacidades del sistema.</li>
+                </ul>
+                <p class="text-gray-700 leading-relaxed">
+                    Las salidas del modelo incluyen variables de estado (niveles de almacenamiento), flujos (entregas, caudales) y métricas de rendimiento del sistema como la fiabilidad de la entrega de agua, la duración de la escasez y el déficit de suministro.
+                </p>
+            </div>
+        </section>
+
+        <section id="simulaciones" class="mb-12 md:mb-16">
+            <div class="section-card">
+                <h3 class="text-2xl md:text-3xl font-semibold text-blue-700 mb-6">Particularidades del Modelo y Simulaciones</h3>
+                <p class="text-gray-700 leading-relaxed mb-4">
+                    Las simulaciones cubren un horizonte temporal desde 2020 hasta 2070. Cada uno de los 26,880 escenarios representa una combinación única de los siguientes factores, definidos para realizar una "prueba de estrés" climática y de demanda sobre el sistema hídrico:
+                </p>
+                <ul class="list-disc list-inside text-gray-700 leading-relaxed space-y-2 mb-4">
+                    <li><strong>Cambio de Temperatura:</strong> Incrementos de 0°C a +5°C (en pasos de 1°C) respecto a la línea base (1980-2005).</li>
+                    <li><strong>Cambio de Precipitación:</strong> Variaciones desde una reducción del 30% hasta un aumento del 30% (en pasos del 10%) respecto a la línea base.</li>
+                    <li><strong>Variabilidad Climática Estocástica:</strong> Se generan múltiples realizaciones (ej. 20 series de 50 años) para cada combinación de cambio de T y P, utilizando el generador climático HMM para capturar la variabilidad natural. Para el visualizador, se selecciona aleatoriamente una de las 5 realizaciones (R1-R5) que representan esta variabilidad inherente para simplificar la selección del usuario.</li>
+                    <li><strong>Crecimiento Poblacional (FW):</strong> Proyecciones para los años 2022 (línea base), 2030, 2040 y 2050.</li>
+                    <li><strong>Crecimiento de Cultivos (Irr - Arroz y Palma de Aceite):</strong> Proyecciones para los años 2022 (línea base), 2030, 2040 y 2050.</li>
+                    <li><strong>Crecimiento Pecuario (Liv - Bovinos, Cerdos, Pollos):</strong> Proyecciones para los años 2022 (línea base), 2030, 2040 y 2050.</li>
+                    <li><strong>Políticas de Asignación de Agua:</strong>
+                        <ul class="list-disc list-inside ml-6">
+                            <li>First Come First Served (FCFS): Asignación basada en "primero en llegar, primero en ser servido", donde los usuarios aguas arriba pueden tomar agua sin considerar las necesidades aguas abajo hasta cierto punto.</li>
+                            <li>Policy Enforced (PE): Aplicación de una política de gestión que sigue un orden de prioridad regulado (ej. priorizando el consumo humano, luego el caudal ecológico, etc.).</li>
+                        </ul>
+                    </li>
+                </ul>
+                <p class="text-gray-700 leading-relaxed">
+                    Cada archivo CSV resultante, nombrado según estas variaciones (ej. "OWF_FCFS_R1_DT0_DP130_FW2022_Irr2050_Liv2050"), contiene series temporales mensuales de variables clave como oferta de agua (caudales simulados), demandas sectoriales, entregas efectivas y déficits.
+                </p>
+            </div>
+        </section>
+
+        <section id="acceso-visualizador" class="text-center">
+             <div class="section-card">
+                <h3 class="text-2xl md:text-3xl font-semibold text-blue-700 mb-6">Explora los Resultados</h3>
+                <p class="text-gray-700 leading-relaxed mb-6">
+                    Utiliza nuestra herramienta interactiva para seleccionar diferentes combinaciones de escenarios y visualizar 
+                    gráficamente los resultados del modelo OWF.
+                </p>
+                <a href="analisis/visualizer.html" 
+                   class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-4 px-10 rounded-lg text-xl shadow-lg transition duration-300 transform hover:scale-105 inline-block">
+                   Ir Resultados Interactivos
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-gray-800 text-gray-300 py-8 mt-12 md:mt-16">
+        <div class="container mx-auto px-6 text-center">
+            <p>&copy; 2024 Nombre de tu Institución o Proyecto. Todos los derechos reservados.</p>
+            <p class="text-sm mt-2">Desarrollado como parte de la investigación sobre gestión de recursos hídricos.</p>
+        </div>
+    </footer>
+
+</body>
+</html>
